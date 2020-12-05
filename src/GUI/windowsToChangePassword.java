@@ -1,15 +1,12 @@
 package GUI;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.*;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JButton;
 import javax.swing.border.EmptyBorder;
-import javax.swing.Box;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import Bean.DBBean;
 
@@ -113,6 +110,21 @@ public class windowsToChangePassword extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //todo
+                ResultSet find=db.executeFind(textField_forgetPassword_IDDisplay.getText(),"login", "user_name");
+                try {
+                    find.next();
+                    if(find.getString("phonenum").equals(textField_forgetPassword_phoneNumber.getText()))
+                        db.executeUpdate("'"+textField_forgetPassword_IDDisplay.getText()+"'","login", "user_name"
+                                ,textField_forgetPassword_newPasswordDisplay.getText(),"user_password");
+                    else{
+                        JTextArea aboutarea = new JTextArea();
+                        aboutarea.setText("电话号码错误\n");
+                        JOptionPane.showConfirmDialog(null,aboutarea,"Error",JOptionPane.PLAIN_MESSAGE);
+
+                    }
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
                 dispose();
             }
         });
