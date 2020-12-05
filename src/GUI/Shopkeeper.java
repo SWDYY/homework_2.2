@@ -1,6 +1,7 @@
 package GUI;
 
 import Bean.DBBean;
+import op.returnVector;
 import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
 
 import javax.swing.*;
@@ -41,6 +42,7 @@ public class Shopkeeper extends JFrame {
     private panelForPersonalAccount panel_personalAccount;
 
     private DBBean db;
+    private String belongto;
 
     private MyJPanel product; // 货品
     private MyJPanel customer;  // 客户
@@ -58,8 +60,10 @@ public class Shopkeeper extends JFrame {
     /**
      * 店长
      */
-    public Shopkeeper(ResourceBundle resourceBundle ,DBBean db){
+    public Shopkeeper(ResourceBundle resourceBundle ,DBBean db, String belongTo){
         this.db=db;
+        this.belongto = belongTo;
+        init_box init = new init_box(resourceBundle);
         myJPanel_productString = resourceBundle.getString("myJPanel_productString");//货品
         panel_customerStirng = resourceBundle.getString("panel_customerStirng");//客户
         panel_sellStirng = resourceBundle.getString("panel_sellStirng");//销售
@@ -88,25 +92,27 @@ public class Shopkeeper extends JFrame {
         try{
             org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();}
         catch(Exception e){}
+
+
         /***货品Panel***/
         Vector<Object> name_product = new Vector<>();
-        name_product.add("ID");
-        name_product.add("Name");
-        name_product.add("Outprice");
+        // todo @sxz
+        name_product.add("ID"); name_product.add("Name"); name_product.add("Outprice");
         product = new MyJPanel(name_product, 0,0);
         tabbedPane_all.add(product);
         tabbedPane_all.addTab(myJPanel_productString, product);
 
+
         /***客户Panel***/
         Vector<Object> name_customer = new Vector<>();
-        name_customer.add("ID");
-        name_customer.add("Name");
-        name_customer.add("PhoneNumber");
-        name_customer.add("address");
+        // todo @sxz
+        // todo returnVector.getname 不能调这个函数，因为这个调了之后字典里面加不上，也就是做不了多语言
+        name_customer.add("ID"); name_customer.add("name");
+        name_customer.add("phonenumber"); name_customer.add("classification");
         customer = new MyJPanel(name_customer, 0,0);
-        customer.setUp(new init_box(resourceBundle).customer(customer, db));
         tabbedPane_all.add(customer);
         tabbedPane_all.add(panel_customerStirng, customer);
+
 
         /***销售Panel***/
         panel_sell = new JPanel();
@@ -116,84 +122,49 @@ public class Shopkeeper extends JFrame {
         tabbedPane_all.addTab(panel_sellStirng, panel_sell);
         tabbedPane_sell = new JTabbedPane();
         panel_sell.add(tabbedPane_sell);
+        // todo @sxz
+        Vector<Object> name_nochange = new Vector<>();
+        name_nochange.add("ID"); name_nochange.add("Name"); name_nochange.add("price_all"); name_nochange.add("State");
+        Vector<Object> name_havechange = new Vector<>();
+        name_havechange.add("ID"); name_havechange.add("Name"); name_havechange.add("price_all"); name_havechange.add("State"); name_havechange.add("StateChange");
 
         /***开销售单secondPanel***/
         Vector<Object> name_order_new = new Vector<>();
-        name_customer.add("表头需该");
-        name_customer.add("2");
-        name_customer.add("3");
-        name_customer.add("4");
-        order_new = new MyJPanel(name_order_new, 0,0);
+        // todo @sxz
+        name_order_new.add("物品名"); name_order_new.add("单价");
+        name_order_new.add("数量"); name_order_new.add("总价");
+        order_new = new MyJPanel(name_order_new, 0,1);
         // todo 注释，店长店员用一个
-//        Box[] temp = new init_box(resourceBundle).order_new(order_new, db, "respository1");
-//        order_new.setUp(temp[0]);
-//        order_new.setDown(temp[1]);
         tabbedPane_sell.add(order_new);
         tabbedPane_sell.addTab(panel_addingOrderStirng, order_new);
 
-
         /***待审核列表secondPanel***/
-        Vector<Object> name_unchecked = new Vector<>();
-        name_unchecked.add("表头需该");
-        name_unchecked.add("2");
-        name_unchecked.add("3");
-        name_unchecked.add("4");
-        order_uncheck = new MyJPanel(name_unchecked, 0,0);
-//        order_uncheck.setDown(new init_box(resourceBundle).order_check_but(order_uncheck, db));
+        order_uncheck = new MyJPanel(name_havechange, 1,2);
         tabbedPane_sell.add(order_uncheck);
         tabbedPane_sell.addTab(To_be_ReviewedStirng, order_uncheck);
 
         /***待付款列表secondPanel***/
-        Vector<Object> name_order_unpaid = new Vector<>();
-        name_order_unpaid.add("表头需该");
-        name_order_unpaid.add("2");
-        name_order_unpaid.add("3");
-        name_order_unpaid.add("4");
-        order_unpaid = new MyJPanel(name_order_unpaid, 0,0);
-//        order_unpaid.setDown(new init_box(resourceBundle).order_check_but(order_unpaid, db));
+        order_unpaid = new MyJPanel(name_havechange, 2,3);
         tabbedPane_sell.add(order_unpaid);
         tabbedPane_sell.addTab(unpaidStirng, order_unpaid);
 
         /***已完成列表secondPanel***/
-        Vector<Object> name_order_finish = new Vector<>();
-        name_order_finish.add("表头需该");
-        name_order_finish.add("2");
-        name_order_finish.add("3");
-        name_order_finish.add("4");
-        order_finish = new MyJPanel(name_order_finish, 0,0);
-//        order_finish.setDown(new init_box(resourceBundle).order_check_but(order_finish, db));
+        order_finish = new MyJPanel(name_havechange, 3,4);
         tabbedPane_sell.add(order_finish);
         tabbedPane_sell.addTab(finishedString, order_finish);
 
         /***待退货列表secondPanel***/
-        Vector<Object> name_order_returning = new Vector<>();
-        name_order_returning.add("表头需该");
-        name_order_returning.add("2");
-        name_order_returning.add("3");
-        name_order_returning.add("4");
-        order_returning = new MyJPanel(name_order_returning, 0,0);
-//        order_returning.setDown(new init_box(resourceBundle).order_check_but(order_returning, db));
+        order_returning = new MyJPanel(name_havechange, 4,5);
         tabbedPane_sell.add(order_returning);
         tabbedPane_sell.addTab(unReturnSring, order_returning);
 
         /***已退货列表secondPanel***/
-        Vector<Object> name_order_returned = new Vector<>();
-        name_order_returned.add("表头需该");
-        name_order_returned.add("2");
-        name_order_returned.add("3");
-        name_order_returned.add("4");
-        order_returned = new MyJPanel(name_order_returned, 0,0);
+        order_returned = new MyJPanel(name_nochange, 5,0);
         tabbedPane_sell.add(order_returned);
         tabbedPane_sell.addTab(returnedSring, order_returned);
 
         /***查看订单列表secondPanel***/
-        Vector<Object> name_order = new Vector<>();
-        name_order.add("表头需改");
-        name_order.add("2");
-        name_order.add("3");
-        name_order.add("4");
-        order_all = new MyJPanel(name_order, 0,0);
-//        order_all.setUp(new init_box(resourceBundle).order_check(order_all, db));
+        order_all = new MyJPanel(name_nochange, 0,0);
         tabbedPane_all.addTab(panel_orderListSring, order_all);
 
         /***库存Panel***/
@@ -207,44 +178,68 @@ public class Shopkeeper extends JFrame {
 
         /***进货secondPanel***/
         Vector<Object> name_stock_in = new Vector<>();
-        name_stock_in.add("表头需改");
-        name_stock_in.add("2");
-        name_stock_in.add("3");
-        name_stock_in.add("4");
+        // todo @sxz
+        name_stock_in.add("物品名"); name_stock_in.add("进价");
+        name_stock_in.add("数量"); name_stock_in.add("总价");
         // todo 店长与经理
         stock_in = new MyJPanel(name_stock_in, 0,0);
-        Box[] temp = new init_box(resourceBundle).stock_in_manager(stock_in, db);
-        stock_in.setUp(temp[0]);
-        stock_in.setUp(temp[1]);
         tabbedPane_stock.add(stock_in);
         tabbedPane_stock.addTab(inStockStirng, stock_in);
 
         /***清点库存secondPanel***/
         Vector<Object> name_stock_check = new Vector<>();
-        name_stock_check.add("表头需改");
-        name_stock_check.add("2");
-        name_stock_check.add("3");
-        name_stock_check.add("4");
+        // todo @sxz
+        name_stock_check.add("id"); name_stock_check.add("name");
+        name_stock_check.add("num"); name_stock_check.add("outprice");
+        name_stock_check.add("outprice_wholesale"); name_stock_check.add("inprie");
         stock_check = new MyJPanel(name_stock_check, 0,0);
-        stock_check.setUp(new init_box(resourceBundle).stock_check(stock_check, db));
         tabbedPane_stock.add(stock_check);
         tabbedPane_stock.addTab(check_stockString, stock_check);
 
+
         /***账户Panel***/
         Vector<Object> name_account = new Vector<>();
-        name_account.add("表头需改");
-        name_account.add("2");
-        name_account.add("3");
-        name_account.add("4");
-        // todo 上面的按钮
+        // todo @sxz
+        name_account.add("ID"); name_account.add("员工名");
+        name_account.add("账户"); name_account.add("密码");
         account = new MyJPanel(name_account, 0,0);
         tabbedPane_all.add(account);
         tabbedPane_all.addTab(AccountSring, account);
+
 
         /***个人账户Panel***/
         panel_personalAccount = new panelForPersonalAccount(resourceBundle);
         tabbedPane_all.add(panel_personalAccount);
         tabbedPane_all.addTab(panel_personalAccountSring, panel_personalAccount);
+
+
+        // 设置box
+        MyJPanel[] related = {order_all, order_uncheck, order_unpaid, order_finish,
+                               order_returning, order_returned/*, stock_check*/};
+        // todo 更新清单时库存更新
+        customer.setUp(init.customer(customer, db));
+        Box[] temp = init.order_new(order_new, db, new MyJPanel[]{order_uncheck, order_all}, belongto);
+        order_new.setUp(temp[0]); order_new.setDown(temp[1]);
+        order_uncheck.setDown(init.order_check_but(order_uncheck, db, related, belongto));
+        order_unpaid.setDown(init.order_check_but(order_unpaid, db, related, belongto));
+        order_finish.setDown(init.order_check_but(order_finish, db, related, belongto));
+        order_returning.setDown(init.order_check_but(order_returning, db, related, belongto));
+        order_all.setUp(init.order_check(order_all, db, related, belongTo));
+        temp = init.stock_in(stock_in, db, stock_check, belongto);
+        stock_in.setUp(temp[0]); stock_in.setDown(temp[1]);
+        stock_check.setUp(init.stock_check(stock_check, db));
+        // todo 账户的按钮
+
+
+        // 读数据
+        product.setData(returnVector.FromDBReadAll(db, belongTo, name_product));
+        customer.setData(returnVector.FromDBReadAll(db, "customermanager", name_customer));
+        for (int i = 1; i < 6; i++){
+            related[i].setData(returnVector.FromDBRead(db, belongTo+"_order", name_nochange, op.op.StateConvert(related[i].getNow()), "State"));
+        }
+        order_all.setData(returnVector.FromDBReadAll(db, belongTo+"_order", name_nochange));
+        stock_check.setData(returnVector.FromDBReadAll(db, belongTo, name_stock_check));
+        // todo 员工管理的数据库没写。。。。。account.setData();
     }
 
 }

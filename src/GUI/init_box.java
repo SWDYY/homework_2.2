@@ -210,24 +210,29 @@ public class init_box {
                     JOptionPane.showConfirmDialog(null,aboutarea,"Error!",JOptionPane.PLAIN_MESSAGE);
                 }
                 else {
-
-                    int id = db.executeQuery(belongto + "_order(Name,State,price_all,profit)",
+                    // 插入订单
+                    int id = db.executeQuery(belongto+"_order(Name,State,price_all,profit)",
                             "'" + textField_addOrder_foundCustomerDisplay.getText() + "'," +
-                                    "'" + op.op.StateConvert("1") + "'," +
+                                    "'" + op.op.StateConvert(table.getNext()) + "'," +
                                     Float.parseFloat(textField_addOrder_totalPriceDisplay.getText()) + "," +
                                     String.valueOf(profit(table, db, belongto)));
+
                     for (Object temp : table.getModel().getDataVector()) {
                         Vector<Object> v = (Vector<Object>)temp;
+                        // 中间表中插入物品
                         db.executeQuery(belongto+"_item_order(repository,order_id,item_name,num)",
                                 "'"+belongto+"'," +
                                         // todo 如何得到这一单的id
                                         "'"+String.valueOf(id)+"'," +
                                         "'"+v.get(0)+"'," +
                                         v.get(2));
+                        // todo 店员的时候关联库存
                     }
                     // 更新表
                     table.setData(new Vector<>());  // 本来就关联的table
-                    related[0].setData(returnVector.FromDBRead(db, belongto + "_order", related[1].getTableName(), "待审核", "State"));  // 未付款的table
+                    Vector<Object> nametemp = new Vector<>();
+                    nametemp.add("ID"); nametemp.add("Name"); nametemp.add("price_all"); nametemp.add("State");
+                    related[0].setData(returnVector.FromDBRead(db, belongto + "_order", nametemp, op.op.StateConvert(related[0].getNow()), "State"));  // 未付款的table
                     related[1].setData(returnVector.FromDBReadAll(db, belongto + "_order", related[1].getTableName()));  // 所有订单列表
                     textField_addOrder_totalPriceDisplay.setText("0");
                 }
@@ -257,6 +262,7 @@ public class init_box {
                     System.out.println(i);
                     db.executeUpdate(String.valueOf(i), belongTo+"_order", "ID", "'"+op.op.StateConvert(table.getNext())+"'", "State");
                     if (table.getNext().equals("待付款")) {/* todo 库存减少 */}
+                    if (table.getNext().equals("退货中")) {/* todo 库存增加 */ }
                 }
                 // table从读
                 Vector<Object> nametemp = new Vector<>();
@@ -319,39 +325,21 @@ public class init_box {
 
     /**
      * 初始化 库存进货 中的box  经理
-     * 经理和店长的区别：1. 表头  2. 更新数据库
      *
      * @param table 关联的table
      * @param db    关联的数据库
      * @return 初始化完成的box
      */
-    public Box[] stock_in_manager(MyJPanel table, DBBean db) {
+    public Box[] stock_in(MyJPanel table, DBBean db, MyJPanel stock, String belongto) {
         Box up = Box.createHorizontalBox();
         Box down = Box.createHorizontalBox();
 
         // 上面的box
         JButton but_add = new JButton(but_addString);
-
-        but_add.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // todo 经理添加
-                windowsToCreateItemForManager winToCreateItemForManager = new windowsToCreateItemForManager(resourceBundle, 1,db);//1随便写的
-                winToCreateItemForManager.setVisible(true);
-                winToCreateItemForManager.setBounds(470, 170, 400, 350);
-                winToCreateItemForManager.setResizable(false);
-            }
-        });
         up.add(but_add);
 
         // 下面的box
         JButton button_restore_save = new JButton(saveString);
-        button_restore_save.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // todo 更新表和数据库
-            }
-        });
         down.add(new JLabel(total_String));
         JTextField textField_restore_totalBuyingPriceDisplay = new JTextField();
         down.add(textField_restore_totalBuyingPriceDisplay);
@@ -359,9 +347,28 @@ public class init_box {
         down.add(Box.createHorizontalStrut(240));
         down.add(button_restore_save);
 
+        but_add.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // todo 经理添加
+                windowsToCreateItemForManager winToCreateItemForManager = new windowsToCreateItemForManager(resourceBundle, db, table, belongto, textField_restore_totalBuyingPriceDisplay);//1随便写的
+                winToCreateItemForManager.setVisible(true);
+                winToCreateItemForManager.setBounds(470, 170, 400, 350);
+                winToCreateItemForManager.setResizable(false);
+            }
+        });
+
+        button_restore_save.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // todo 更新表和数据库
+            }
+        });
+
         Box[] res = {up, down};
         return res;
     }
+
 
 
     /**
@@ -509,12 +516,12 @@ public class init_box {
      */
     private void refresh(String belongto, MyJPanel[] all, DBBean db){
         Vector<Object> nametemp = new Vector<>();
-        nametemp.add("ID"); nametemp.add("Name"); nametemp.add("price_all");
+        nametemp.add("ID"); nametemp.add("Name"); nametemp.add("price_all"); nametemp.add("State");
         int i = 0;
         for (MyJPanel temp : all) {
             if (i == 0) temp.setData(returnVector.FromDBReadAll(db, belongto+"_order", temp.getTableName()));  // 总订单
             else if (i == 6) {/* todo 库存从读 */}
-            else if (temp != null) temp.setData(returnVector.FromDBRead(db, belongto+"_order", nametemp, StateConvert(String.valueOf(i)), "State"));
+            else if (temp != null) temp.setData(returnVector.FromDBRead(db, belongto+"_order", nametemp, StateConvert(temp.getNow()), "State"));
             i++;
         }
     }

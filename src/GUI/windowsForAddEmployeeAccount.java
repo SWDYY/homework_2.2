@@ -10,6 +10,11 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import Bean.DBBean;
 
@@ -28,7 +33,7 @@ public class windowsForAddEmployeeAccount extends JFrame {
     private String saveString;// 保   存
     private String cancel;// 取   消
     private String user_name;//用户名
-
+    private String new_repository_name=null;
 
     private JTextField textField_addAccount_usernameDisplay;
     private JTextField textField_addAccount_phoneNumberDisplay;
@@ -108,6 +113,7 @@ public class windowsForAddEmployeeAccount extends JFrame {
         Box horizontalBox_addAccount_choosePosition = Box.createHorizontalBox();
         GridBagConstraints gbc_horizontalBox_addAccount_choosePosition = new GridBagConstraints();
         gbc_horizontalBox_addAccount_choosePosition.fill = GridBagConstraints.BOTH;
+
         gbc_horizontalBox_addAccount_choosePosition.insets = new Insets(0, 0, 5, 0);
         gbc_horizontalBox_addAccount_choosePosition.gridx = 2;
         gbc_horizontalBox_addAccount_choosePosition.gridy = 3;
@@ -116,8 +122,80 @@ public class windowsForAddEmployeeAccount extends JFrame {
         JRadioButton radioButton_addAccount_shopkeeper = new JRadioButton(shopkeeperString);
         horizontalBox_addAccount_choosePosition.add(radioButton_addAccount_shopkeeper);
 
+        ArrayList<String> repository_name_list=new ArrayList<String>();
+        ResultSet repository_name_all=db.executeFindAll("repository_name");
+        try {
+            while(repository_name_all.next()){
+                repository_name_list.add(repository_name_all.getString("name"));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        String[] repository_name = new String[repository_name_list.size()];
+        repository_name_list.toArray(repository_name);
+        JComboBox comboBox_addAccount_chooseLocation = new JComboBox(repository_name);
+        GridBagConstraints gbc_comboBox_addAccount_chooseLocation = new GridBagConstraints();
+        gbc_comboBox_addAccount_chooseLocation.fill = GridBagConstraints.BOTH;
+        gbc_comboBox_addAccount_chooseLocation.gridx = 2;
+        gbc_comboBox_addAccount_chooseLocation.gridy = 4;
+        panel.add(comboBox_addAccount_chooseLocation, gbc_comboBox_addAccount_chooseLocation);
+        radioButton_addAccount_shopkeeper.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if(radioButton_addAccount_shopkeeper.isSelected()){
+                    JFrame windowToAddShop = new JFrame("新建店面");
+                    JPanel panel = new JPanel();
+                    panel.setLayout(new BorderLayout());
+                    windowToAddShop.add(panel);
+                    Box verBox = Box.createVerticalBox();
+                    Box horizontalBox1 = Box.createHorizontalBox();
+                    Box horizontalBox2 = Box.createHorizontalBox();
+                    panel.add(verBox,BorderLayout.CENTER);
+                    JLabel label = new JLabel("店铺名称");
+                    JTextField textField = new JTextField();
+                    JButton confirm = new JButton("确  定");
+                    JButton cancel = new JButton("取  消");
+                    cancel.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            windowToAddShop.dispose();
+                        }
+                    });
+                    confirm.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            new_repository_name=textField.getText();
+                            db.executeCreateNewTable(new_repository_name,"repository");
+                            db.executeCreateNewTable(new_repository_name+"_order","order");
+                            db.executeCreateNewTable(new_repository_name+"_item_order","item_order");
+                            db.executeQuery("repository_name(name)",
+                                    "'"+new_repository_name+"'");
+                            comboBox_addAccount_chooseLocation.addItem(new_repository_name);
+                            comboBox_addAccount_chooseLocation.setSelectedItem(new_repository_name);
+                            windowToAddShop.dispose();
+                        }
+                    });
+                    horizontalBox1.add(label);
+                    horizontalBox1.add(textField);
+                    horizontalBox2.add(confirm);
+                    horizontalBox2.add(Box.createHorizontalStrut(50));
+                    horizontalBox2.add(cancel);
+                    verBox.add(horizontalBox1);
+                    verBox.add(horizontalBox2);
+
+                    windowToAddShop.setVisible(true);
+                    windowToAddShop.setBounds(400,600,400,300);
+                    windowToAddShop.setResizable(false);
+                }
+
+            }
+        });
+
+
         JRadioButton radioButton_addAccount_employee = new JRadioButton(panel_sellStirng);
         horizontalBox_addAccount_choosePosition.add(radioButton_addAccount_employee);
+        radioButton_addAccount_employee.setSelected(true);
+
 
         ButtonGroup group = new ButtonGroup();
         group.add(radioButton_addAccount_employee);
@@ -133,12 +211,23 @@ public class windowsForAddEmployeeAccount extends JFrame {
         gbc_label_addAccount_location.gridy = 4;
         panel.add(label_addAccount_location, gbc_label_addAccount_location);
 
-        JComboBox comboBox_addAccount_chooseLocation = new JComboBox();
-        GridBagConstraints gbc_comboBox_addAccount_chooseLocation = new GridBagConstraints();
-        gbc_comboBox_addAccount_chooseLocation.fill = GridBagConstraints.BOTH;
-        gbc_comboBox_addAccount_chooseLocation.gridx = 2;
-        gbc_comboBox_addAccount_chooseLocation.gridy = 4;
-        panel.add(comboBox_addAccount_chooseLocation, gbc_comboBox_addAccount_chooseLocation);
+//        ArrayList<String> repository_name_list=new ArrayList<String>();
+//        ResultSet repository_name_all=db.executeFindAll("repository_name");
+//        try {
+//            while(repository_name_all.next()){
+//                repository_name_list.add(repository_name_all.getString("name"));
+//            }
+//        } catch (SQLException throwables) {
+//            throwables.printStackTrace();
+//        }
+//        String[] repository_name = new String[repository_name_list.size()];
+//        repository_name_list.toArray(repository_name);
+//        JComboBox comboBox_addAccount_chooseLocation = new JComboBox(repository_name);
+//        GridBagConstraints gbc_comboBox_addAccount_chooseLocation = new GridBagConstraints();
+//        gbc_comboBox_addAccount_chooseLocation.fill = GridBagConstraints.BOTH;
+//        gbc_comboBox_addAccount_chooseLocation.gridx = 2;
+//        gbc_comboBox_addAccount_chooseLocation.gridy = 4;
+//        panel.add(comboBox_addAccount_chooseLocation, gbc_comboBox_addAccount_chooseLocation);
 
         /***底部按钮***/
         Box horizontalBox = Box.createHorizontalBox();
@@ -150,7 +239,23 @@ public class windowsForAddEmployeeAccount extends JFrame {
         JButton button_addAccount_save = new JButton(saveString);
         button_addAccount_save.addActionListener(new ActionListener() {
             @Override
+
             public void actionPerformed(ActionEvent e) {
+                if(radioButton_addAccount_employee.isSelected()){
+                    db.executeQuery("login(user_name,user_password,phonenum,authority,belongto)",
+                            "'"+textField_addAccount_usernameDisplay.getText() +"','123456','"
+                                    +textField_addAccount_phoneNumberDisplay.getText()+"','employee','"
+                                    +comboBox_addAccount_chooseLocation.getSelectedItem()+"'");
+                }
+                else if(radioButton_addAccount_shopkeeper.isSelected()){
+
+                    db.executeQuery("login(user_name,user_password,phonenum,authority,belongto)",
+                            "'"+textField_addAccount_usernameDisplay.getText() +"','123456','"
+                                    +textField_addAccount_phoneNumberDisplay.getText()+"','shopkeeper','"
+                                    +new_repository_name+"'");
+
+                }
+
                 dispose();
             }
         });

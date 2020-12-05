@@ -40,7 +40,7 @@ public class Employee extends JFrame {
     private MyJPanel order_all;  // 订单列表、
 
 
-    public Employee(ResourceBundle resourceBundle, String belongTo, DBBean db){
+    public Employee(ResourceBundle resourceBundle, DBBean db, String belongTo){
 
         init = new init_box(resourceBundle);
         belongto = belongTo;
@@ -73,7 +73,6 @@ public class Employee extends JFrame {
         name_product.add("ID"); name_product.add("Name");
         name_product.add("outprice");
         product = new MyJPanel(name_product, 0, 0);
-        product.setData(returnVector.FromDBReadAll(db, belongTo, name_product));
         tabbedPane_all.add(product);
         tabbedPane_all.addTab(myJPanel_productString, product);
 
@@ -101,18 +100,18 @@ public class Employee extends JFrame {
         // todo @sxz
         name_order_new.add("物品名"); name_order_new.add("单价");
         name_order_new.add("数量"); name_order_new.add("总价");
-        order_new = new MyJPanel(name_order_new, 0, 0);
+        order_new = new MyJPanel(name_order_new, 0, 2);
         tabbedPane_sell.add(order_new);
         tabbedPane_sell.addTab(panel_addingOrderStirng, order_new);
 
-        /***未付款（零售）***/
+        /***未收款（零售）***/
         Vector<Object> name_order_unpaid = new Vector<>();
         // todo @sxz
         name_order_unpaid.add("ID"); name_order_unpaid.add("Name");
-        name_order_unpaid.add("price_all");
-        Vector<Vector<Object>> temp_data = returnVector.FromDBRead(db, belongTo+"_order", name_order_unpaid, "待审核", "State");
+        name_order_unpaid.add("price_all"); name_order_unpaid.add("State");
+        Vector<Vector<Object>> temp_data = returnVector.FromDBRead(db, belongTo+"_order", name_order_unpaid, "待收款", "State");
         name_order_unpaid.add("changeState");
-        order_unpaid = new MyJPanel(name_order_unpaid, 1,2);
+        order_unpaid = new MyJPanel(name_order_unpaid, 2,3);
         tabbedPane_sell.add(order_unpaid);
         tabbedPane_sell.addTab(panel_cashieringString, order_unpaid);
 
@@ -137,6 +136,7 @@ public class Employee extends JFrame {
         order_all.setUp(init.order_check(order_all, db, new MyJPanel[]{order_all, order_unpaid}, belongto));
 
         // 设置数据
+        product.setData(returnVector.FromDBReadAll(db, belongTo, name_product));
         customer.setData(returnVector.FromDBReadAll(db, "customermanager", name_customer));
         order_unpaid.setData(temp_data);
         order_all.setData(returnVector.FromDBReadAll(db, belongTo+"_order", name_order));

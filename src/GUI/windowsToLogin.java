@@ -117,13 +117,13 @@ public class windowsToLogin extends JFrame {
                 /*****测试代码*****/
                 System.out.println(textField_login_username.getText());
                 if (textField_login_username.getText().equals("1")) {
-                    Employee employee = new Employee(resourceBundle, "repository1",db);
+                    Employee employee = new Employee(resourceBundle, db, "repository1");
                     employee.setVisible(true);
                     employee.setBounds(450, 150, 1500, 1000);
                     employee.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
                     show.dispose();
                 } else if (textField_login_username.getText().equals("2")) {
-                    Shopkeeper shopkeeper = new Shopkeeper(resourceBundle,db);
+                    Shopkeeper shopkeeper = new Shopkeeper(resourceBundle,db, "repository1");
                     shopkeeper.setVisible(true);
                     shopkeeper.setBounds(450, 150, 1500, 1000);
                     shopkeeper.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

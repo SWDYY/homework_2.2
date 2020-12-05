@@ -113,9 +113,9 @@ public class MyJPanel extends JPanel{
      */
     public void setData(Vector<Vector<Object>> data) {
         // 更新表格中的信息
-        if (now == 0 && next == 0) this.model = new DefaultTableModel_noEditable(data, this.name, 99);
+        if (now == 0 || next == 0) this.model = new DefaultTableModel_noEditable(data, this.name, 99);
         else {
-            this.model =new DefaultTableModel_noEditable(data, name, 3);
+            this.model =new DefaultTableModel_noEditable(data, name, 4);
             this.table.setModel(this.model);
             TableColumn tcm = table.getColumnModel().getColumn(name.size()-1);
             tcm.setCellEditor(table.getDefaultEditor(Boolean.class));

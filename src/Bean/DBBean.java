@@ -74,6 +74,13 @@ public class DBBean {
                     "num int NOT NULL," +
                     "outprice_wholesale float NOT NULL)";
         }
+        else if(type.equals("item_order")){
+            sql = "create table " + tableName +
+                    "(repository  varchar(100) NOT NULL, " +
+                    "order_id int NOT NULL" +
+                    ",item_name varchar(100) NOT NULL" +
+                    ",num int NOT NULL)";
+        }
         System.out.println("--创建新的表:"+sql+"\n");
         try {
             result = stmt.executeUpdate(sql);

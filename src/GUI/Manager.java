@@ -70,8 +70,7 @@ public class Manager extends JFrame {
 
         /***货品Panel***/
         Vector<Object> name_product = new Vector<>();
-        name_product.add("ID");
-        name_product.add("Name");
+        name_product.add("ID"); name_product.add("Name");
         name_product.add("Outpirce");
         product = new MyJPanel(name_product, 0,0);
         tabbedPane_all.add(product);
@@ -79,12 +78,11 @@ public class Manager extends JFrame {
 
         /***客户Panel***/
         Vector<Object> name_customer = new Vector<>();
-        name_customer.add("ID");
-        name_customer.add("Name");
-        name_customer.add("PhoneNumber");
-        name_customer.add("address");
-        customer = new MyJPanel(name_customer, 0,0);
-        customer.setUp(init.customer(customer, db));
+        // todo @sxz
+        // todo returnVector.getname 不能调这个函数，因为这个调了之后字典里面加不上，也就是做不了多语言
+        name_customer.add("ID"); name_customer.add("name");
+        name_customer.add("phonenumber"); name_customer.add("classification");
+        customer = new MyJPanel(name_customer, 0, 0);
         tabbedPane_all.add(customer);
         tabbedPane_all.add(panel_customerStirng, customer);
 
@@ -115,7 +113,7 @@ public class Manager extends JFrame {
         name_stock_in.add("4");
         // todo 店长与经理
         stock_in = new MyJPanel(name_stock_in, 0,0);
-        Box[] temp = init.stock_in_manager(stock_in, db);
+        Box[] temp = init.stock_in(stock_in, db, stock_check, "respo");
         stock_in.setUp(temp[0]);
         stock_in.setUp(temp[1]);
         tabbedPane_stock.add(stock_in);

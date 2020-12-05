@@ -39,7 +39,7 @@ public class windowsToCreateItemForManager extends JFrame {
     private JTextField textField_addItem_outpriceDisplay;
     private windowsToCreateItemForManager a = this;
 
-    public windowsToCreateItemForManager(ResourceBundle resourceBundle, int op,DBBean db) {
+    public windowsToCreateItemForManager(ResourceBundle resourceBundle,DBBean db, MyJPanel table, String belongto, JTextField total) {
         add_newItemString = resourceBundle.getString("add_newItemString");// 新增入库商品
         product_nameString = resourceBundle.getString("product_nameString");// 货物名称
         productNumString = resourceBundle.getString("productNumString");// 货物数量
@@ -144,23 +144,23 @@ public class windowsToCreateItemForManager extends JFrame {
         panel.add(textField_addItem_outpriceDisplay, gbc_textField_addItem_outpriceDisplay);
         textField_addItem_outpriceDisplay.setColumns(10);
 
-        if (op != 0) {
-            JLabel label_addItem_focusRepository = new JLabel(targetStockString);
-            label_addItem_focusRepository.setFont(new Font("微软雅黑", Font.BOLD, 15));
-            label_addItem_focusRepository.setHorizontalAlignment(SwingConstants.RIGHT);
-            GridBagConstraints gbc_label_addItem_focusRepository = new GridBagConstraints();
-            gbc_label_addItem_focusRepository.insets = new Insets(0, 0, 0, 5);
-            gbc_label_addItem_focusRepository.gridx = 1;
-            gbc_label_addItem_focusRepository.gridy = 4;
-            panel.add(label_addItem_focusRepository, gbc_label_addItem_focusRepository);
 
-            JComboBox comboBox__addItem_focusRepository = new JComboBox();
-            GridBagConstraints gbc_comboBox__addItem_focusRepository = new GridBagConstraints();
-            gbc_comboBox__addItem_focusRepository.fill = GridBagConstraints.HORIZONTAL;
-            gbc_comboBox__addItem_focusRepository.gridx = 2;
-            gbc_comboBox__addItem_focusRepository.gridy = 4;
-            panel.add(comboBox__addItem_focusRepository, gbc_comboBox__addItem_focusRepository);
-        }
+        JLabel label_addItem_focusRepository = new JLabel(targetStockString);
+        label_addItem_focusRepository.setFont(new Font("微软雅黑", Font.BOLD, 15));
+        label_addItem_focusRepository.setHorizontalAlignment(SwingConstants.RIGHT);
+        GridBagConstraints gbc_label_addItem_focusRepository = new GridBagConstraints();
+        gbc_label_addItem_focusRepository.insets = new Insets(0, 0, 0, 5);
+        gbc_label_addItem_focusRepository.gridx = 1;
+        gbc_label_addItem_focusRepository.gridy = 4;
+        panel.add(label_addItem_focusRepository, gbc_label_addItem_focusRepository);
+
+        JComboBox comboBox__addItem_focusRepository = new JComboBox();
+        GridBagConstraints gbc_comboBox__addItem_focusRepository = new GridBagConstraints();
+        gbc_comboBox__addItem_focusRepository.fill = GridBagConstraints.HORIZONTAL;
+        gbc_comboBox__addItem_focusRepository.gridx = 2;
+        gbc_comboBox__addItem_focusRepository.gridy = 4;
+        panel.add(comboBox__addItem_focusRepository, gbc_comboBox__addItem_focusRepository);
+
 
 
         Box horizontalBox = Box.createHorizontalBox();
