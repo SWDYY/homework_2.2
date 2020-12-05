@@ -53,7 +53,7 @@ public class Employee extends JFrame {
         panel_cashieringString = resourceBundle.getString("panel_cashieringString");//收银
         panel_orderListSring = resourceBundle.getString("panel_orderListSring");//订单列表
         panel_personalAccountSring = resourceBundle.getString("panel_personalAccountSring");//个人账户
-        menubar menu = new menubar(resourceBundle);
+        menubar menu = new menubar(resourceBundle,this, db);
         this.setJMenuBar(menu);
         try{
         org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();}
@@ -100,18 +100,15 @@ public class Employee extends JFrame {
         // todo @sxz
         name_order_new.add("物品名"); name_order_new.add("单价");
         name_order_new.add("数量"); name_order_new.add("总价");
-        order_new = new MyJPanel(name_order_new, 0, 2);
+        order_new = new MyJPanel(name_order_new, 0, 3);
         tabbedPane_sell.add(order_new);
         tabbedPane_sell.addTab(panel_addingOrderStirng, order_new);
 
         /***未收款（零售）***/
         Vector<Object> name_order_unpaid = new Vector<>();
-        // todo @sxz
-        name_order_unpaid.add("ID"); name_order_unpaid.add("Name");
-        name_order_unpaid.add("price_all"); name_order_unpaid.add("State");
-        Vector<Vector<Object>> temp_data = returnVector.FromDBRead(db, belongTo+"_order", name_order_unpaid, "待收款", "State");
-        name_order_unpaid.add("changeState");
-        order_unpaid = new MyJPanel(name_order_unpaid, 2,3);
+        // todo
+        name_order_unpaid.add("这里展示付款二维码+付款完成的按钮");
+        order_unpaid = new MyJPanel(name_order_unpaid, 0,0);
         tabbedPane_sell.add(order_unpaid);
         tabbedPane_sell.addTab(panel_cashieringString, order_unpaid);
 
@@ -123,23 +120,24 @@ public class Employee extends JFrame {
         tabbedPane_sell.addTab(panel_orderListSring, order_all);
 
         /***个人账户***/
-        panel_personalAccount = new panelForPersonalAccount(resourceBundle);
+        panel_personalAccount = new panelForPersonalAccount(resourceBundle, db);
         tabbedPane_all.add(panel_personalAccount);
         tabbedPane_all.addTab(panel_personalAccountSring, panel_personalAccount);
 
         // 设置box
         customer.setUp(init.customer(customer, db));
-        Box[] temp = init.order_new(order_new, db, new MyJPanel[]{order_unpaid, order_all}, belongto);
+        Box[] temp = init.order_new(order_new, db, new MyJPanel[]{order_all}, belongto);
         order_new.setUp(temp[0]);
         order_new.setDown(temp[1]);
-        order_unpaid.setDown(init.order_check_but(order_unpaid, db, new MyJPanel[]{order_all, order_unpaid}, belongto));
-        order_all.setUp(init.order_check(order_all, db, new MyJPanel[]{order_all, order_unpaid}, belongto));
+        order_all.setUp(init.order_check(order_all, db, new MyJPanel[]{order_all}, belongto));
 
         // 设置数据
         product.setData(returnVector.FromDBReadAll(db, belongTo, name_product));
         customer.setData(returnVector.FromDBReadAll(db, "customermanager", name_customer));
-        order_unpaid.setData(temp_data);
         order_all.setData(returnVector.FromDBReadAll(db, belongTo+"_order", name_order));
 
     }
+
+    public String getBelongto() { return this.belongto; }
+
 }

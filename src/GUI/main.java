@@ -23,7 +23,7 @@ public class main {
         DBBean db=new DBBean();
         initGlobalFontSetting(new Font("仿宋", Font.PLAIN, 15));  //统一设置字体
         org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
-        windowsToLogin winToLogin = new windowsToLogin(language_convert.language_convertAll(),db);
+        windowsToLogin winToLogin = new windowsToLogin(language_convert.language_convertChinese(), db);
         winToLogin.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         winToLogin.setVisible(true);
         winToLogin.setBounds(400,150,400,300);

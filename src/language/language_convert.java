@@ -21,7 +21,13 @@ public class language_convert {
      * 设定不同语言    更改返回值返回不同语言
      * @return
      */
-    public static ResourceBundle language_convertAll(){
+    public static ResourceBundle language_convertEnglish(){
+        return myResourcesUS;
+    }
+    public static ResourceBundle language_convertChinese(){
         return myResourcesCN;
+    }
+    public static ResourceBundle language_convertDeutsch(){
+        return myResourcesDeu;
     }
 }

@@ -55,7 +55,7 @@ public class Manager extends JFrame {
         panel_orderListSring = resourceBundle.getString("panel_orderListSring");//订单列表
         panel_personalAccountSring = resourceBundle.getString("panel_personalAccountSring");//个人账户
 
-        menubar menu = new menubar(resourceBundle);
+        menubar menu = new menubar(resourceBundle,this, db);
         JPanel totalPanel = new JPanel();
         totalPanel.setLayout(new BorderLayout());
         totalPanel.setPreferredSize( new Dimension(920, 600));
@@ -153,8 +153,11 @@ public class Manager extends JFrame {
         tabbedPane_all.addTab(AccountSring, account);
 
         /***个人账户Panel***/
-        panel_personalAccount = new panelForPersonalAccount(resourceBundle);
+        panel_personalAccount = new panelForPersonalAccount(resourceBundle, db);
         tabbedPane_all.add(panel_personalAccount);
         tabbedPane_all.addTab(panel_personalAccountSring, panel_personalAccount);
     }
+
+    public String getBelongto() { return "res"; }
+
 }

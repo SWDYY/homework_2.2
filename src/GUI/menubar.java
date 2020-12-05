@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
 
+import Bean.DBBean;
+import language.language_convert;
 public class menubar extends JMenuBar {
     private String MenuFileStirng;//文件
     private String menuSettingStirng;//设置
@@ -17,6 +19,7 @@ public class menubar extends JMenuBar {
     private String menuItem_FontSring;//字体
     private String menuItem_helpSring;//帮助
     private String menuItem_aboutSring;//关于
+    private menubar show=this;
 
     private JMenu menuFile;
     private JMenu menuSetting;
@@ -31,7 +34,7 @@ public class menubar extends JMenuBar {
     private JRadioButtonMenuItem German;
 
 
-    public menubar(ResourceBundle resourceBundle) {
+    public menubar(ResourceBundle resourceBundle, JFrame jFrame, DBBean db) {
         MenuFileStirng = resourceBundle.getString("MenuFileStirng");//文件
         menuSettingStirng = resourceBundle.getString("menuSettingStirng");//设置
         menuHelpStirng = resourceBundle.getString("menuHelpStirng");//帮助
@@ -55,9 +58,78 @@ public class menubar extends JMenuBar {
         menuFile.add(menuItem_Quit);
 
         Chinese = new JRadioButtonMenuItem(ChineseSring);
+        Chinese.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jFrame.dispose();
+                JFrame win = null;
+                if(jFrame.getClass().equals(new Employee(resourceBundle, db, "repository1").getClass())){
+                    win=new Employee(language_convert.language_convertChinese(), db, ((Employee)jFrame).getBelongto());
+                    win.setBounds(450, 150, 1500, 1000);
+                }else if(jFrame.getClass().equals(new Manager(resourceBundle, db).getClass())) {
+                    win = new Manager(language_convert.language_convertChinese(), db);
+                    win.setBounds(450, 150, 1500, 1000);
+                }else if(jFrame.getClass().equals(new Shopkeeper(resourceBundle, db, "repository1").getClass())){
+                    win=new Shopkeeper(language_convert.language_convertChinese(), db, ((Employee)jFrame).getBelongto());
+                    win.setBounds(450, 150, 1500, 1000);
+                }else if(jFrame.getClass().equals(new windowsToLogin(resourceBundle, db).getClass())){
+                    win=new windowsToLogin(language_convert.language_convertChinese(), db);
+                    win.setBounds(400, 250, 400, 300);
+                }
+                win.setVisible(true);
+                win.setResizable(false);
+                win.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+            }
+        });
         Chinese.setSelected(true);
         English = new JRadioButtonMenuItem(EnglishSring);
+        English.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jFrame.dispose();
+                JFrame win = null;
+                if(jFrame.getClass().equals(new Employee(resourceBundle, db, "repository1").getClass())){
+                    win=new Employee(language_convert.language_convertEnglish(), db, ((Employee)jFrame).getBelongto());
+                    win.setBounds(450, 150, 1500, 1000);
+                }else if(jFrame.getClass().equals(new Manager(resourceBundle, db).getClass())){
+                    win=new Manager(language_convert.language_convertEnglish(), db);
+                    win.setBounds(450, 150, 1500, 1000);
+                }else if(jFrame.getClass().equals(new Shopkeeper(resourceBundle, db, "repository1").getClass())){
+                    win=new Shopkeeper(language_convert.language_convertEnglish(), db, ((Employee)jFrame).getBelongto());
+                    win.setBounds(450, 150, 1500, 1000);
+                }else if(jFrame.getClass().equals(new windowsToLogin(resourceBundle, db).getClass())){
+                    win=new windowsToLogin(language_convert.language_convertEnglish(), db);
+                    win.setBounds(400, 250, 400, 300);
+                }
+                win.setVisible(true);
+                win.setResizable(false);
+                win.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+            }
+        });
         German = new JRadioButtonMenuItem(DeutschSring);
+        German.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jFrame.dispose();
+                JFrame win = null;
+                if(jFrame.getClass().equals(new Employee(resourceBundle, db, "repository1").getClass())){
+                    win=new Employee(language_convert.language_convertDeutsch(), db, ((Employee)jFrame).getBelongto());
+                    win.setBounds(450, 150, 1500, 1000);
+                }else if(jFrame.getClass().equals(new Manager(resourceBundle, db).getClass())){
+                    win=new Manager(language_convert.language_convertDeutsch(), db);
+                    win.setBounds(450, 150, 1500, 1000);
+                }else if(jFrame.getClass().equals(new Shopkeeper(resourceBundle, db, "repository1"))){
+                    win=new Shopkeeper(language_convert.language_convertDeutsch(), db, ((Employee)jFrame).getBelongto());
+                    win.setBounds(450, 150, 1500, 1000);
+                }else if(jFrame.getClass().equals(new windowsToLogin(resourceBundle, db).getClass())){
+                    win=new windowsToLogin(language_convert.language_convertDeutsch(), db);
+                    win.setBounds(400, 250, 400, 300);
+                }
+                win.setVisible(true);
+                win.setResizable(false);
+                win.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+            }
+        });
 
         ButtonGroup group = new ButtonGroup();
         group.add(Chinese);

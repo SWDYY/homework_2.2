@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import javax.swing.border.EmptyBorder;
 
 import Bean.DBBean;
+import language.language_convert;
 import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
 
 import java.awt.event.ActionListener;
@@ -18,12 +19,13 @@ import java.util.ResourceBundle;
 
 public class windowsToLogin extends JFrame {
     /***/
-    private String user_login ;//用户登录
-    private String user_name ;//用户名
-    private String user_password ;//密码
-    private String cancel ;//取消
+    private ResourceBundle resourceBundle;
+    private String user_login;//用户登录
+    private String user_name;//用户名
+    private String user_password;//密码
+    private String cancel;//取消
     private String login;//登录
-    private String forgetPassword ;//忘记密码？
+    private String forgetPassword;//忘记密码？
 
 
     private JTextField textField_login_username;
@@ -31,12 +33,14 @@ public class windowsToLogin extends JFrame {
     private windowsToLogin show = this;
 
     public windowsToLogin(ResourceBundle resourceBundle, DBBean db) {
+        this.resourceBundle = resourceBundle;
         user_login = resourceBundle.getString("user_login");//用户登录
         user_name = resourceBundle.getString("user_name");//用户名
         user_password = resourceBundle.getString("user_password");//密码
         cancel = resourceBundle.getString("cancel");//取消
         login = resourceBundle.getString("login");//登录
         forgetPassword = resourceBundle.getString("forgetPassword");//忘记密码？
+
 
         try {
             BeautyEyeLNFHelper.launchBeautyEyeLNF();
@@ -50,7 +54,7 @@ public class windowsToLogin extends JFrame {
         panel_total.setLayout(new BorderLayout());
         this.add(panel_total);
 
-        menubar menu = new menubar(resourceBundle);
+        menubar menu = new menubar(resourceBundle,this, db);
         this.setJMenuBar(menu);
         /*******登陆界面********/
         JPanel panel = new JPanel();
@@ -123,13 +127,13 @@ public class windowsToLogin extends JFrame {
                     employee.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
                     show.dispose();
                 } else if (textField_login_username.getText().equals("2")) {
-                    Shopkeeper shopkeeper = new Shopkeeper(resourceBundle,db, "repository1");
+                    Shopkeeper shopkeeper = new Shopkeeper(resourceBundle, db, "repository1");
                     shopkeeper.setVisible(true);
                     shopkeeper.setBounds(450, 150, 1500, 1000);
                     shopkeeper.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
                     show.dispose();
                 } else if (textField_login_username.getText().equals("3")) {
-                    Manager manager = new Manager(resourceBundle,db);
+                    Manager manager = new Manager(resourceBundle, db);
                     manager.setVisible(true);
                     manager.setBounds(450, 150, 1500, 1000);
                     manager.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -172,5 +176,6 @@ public class windowsToLogin extends JFrame {
                 winToChangePassword.setBounds(420, 180, 400, 300);
             }
         });
+        this.setBounds(400, 250, 400, 300);
     }
 }

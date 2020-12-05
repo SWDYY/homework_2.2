@@ -228,4 +228,32 @@ public class DBBean {
         } catch (Exception e) {
         }
     }
+
+
+    /**
+     * 返回tablename表的最大ID  也就是最新添加的一行数据
+     * @param tableName   想要查询的数据库的表名
+     * @param type   输入”id“表示ID列的字段为小写id,输入”ID”表示ID列的字段为大写ID
+     * @return  返回查询到的行
+     * eg:       resultSet=dbBean.executeFindMAXID("customermanager","id");
+     */
+    public ResultSet executeFindMAXID(String tableName, String type) {
+        ResultSet rs = null;
+        String id;
+        if(type.equals("id")){
+            id="id";
+        }else {
+            id="ID";
+        }
+        String sql="select * from "+tableName+" where "+id+" = (SELECT max("+id+") FROM "+tableName+")";//定义一个查询语句
+        System.out.print("--查询最大ID语句:"+sql+"\n");
+        try {
+            rs = stmt.executeQuery(sql);
+            System.out.println(rs);
+        } catch (Exception ex) {
+            System.out.println(ex);
+            System.out.println("ִ执行查询最大ID错误！");
+        }
+        return rs;
+    }
 }

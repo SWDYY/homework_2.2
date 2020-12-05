@@ -80,7 +80,7 @@ public class Shopkeeper extends JFrame {
         AccountSring = resourceBundle.getString("AccountSring");//账户
         panel_personalAccountSring = resourceBundle.getString("panel_personalAccountSring");//个人账户
 
-        menubar menu = new menubar(resourceBundle);
+        menubar menu = new menubar(resourceBundle,this, db);
         JPanel totalPanel = new JPanel();
         totalPanel.setLayout(new BorderLayout());
         totalPanel.setPreferredSize( new Dimension(920, 600));
@@ -179,8 +179,9 @@ public class Shopkeeper extends JFrame {
         /***进货secondPanel***/
         Vector<Object> name_stock_in = new Vector<>();
         // todo @sxz
-        name_stock_in.add("物品名"); name_stock_in.add("进价");
-        name_stock_in.add("数量"); name_stock_in.add("总价");
+        name_stock_in.add("物品名"); name_stock_in.add("数量");
+        name_stock_in.add("进价"); name_stock_in.add("售价");
+        name_stock_in.add("售价（批发）");
         // todo 店长与经理
         stock_in = new MyJPanel(name_stock_in, 0,0);
         tabbedPane_stock.add(stock_in);
@@ -208,7 +209,7 @@ public class Shopkeeper extends JFrame {
 
 
         /***个人账户Panel***/
-        panel_personalAccount = new panelForPersonalAccount(resourceBundle);
+        panel_personalAccount = new panelForPersonalAccount(resourceBundle, db);
         tabbedPane_all.add(panel_personalAccount);
         tabbedPane_all.addTab(panel_personalAccountSring, panel_personalAccount);
 
@@ -241,5 +242,8 @@ public class Shopkeeper extends JFrame {
         stock_check.setData(returnVector.FromDBReadAll(db, belongTo, name_stock_check));
         // todo 员工管理的数据库没写。。。。。account.setData();
     }
+
+    public String getBelongto() { return this.belongto; }
+
 
 }

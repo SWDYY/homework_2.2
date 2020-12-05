@@ -34,7 +34,7 @@ public class panelForPersonalAccount extends JPanel {
     private JTextField textField_changePassword_oldPassword;
     private JTextField textField_changePassword_newPassword;
 
-    public panelForPersonalAccount(ResourceBundle resourceBundle) {
+    public panelForPersonalAccount(ResourceBundle resourceBundle, DBBean db) {
         changePasswordString = resourceBundle.getString("changePasswordString");//修改密码
         oldPasswordString = resourceBundle.getString("oldPasswordString");//旧密码
         newPasswordString = resourceBundle.getString("newPasswordString");//新密码
@@ -134,7 +134,7 @@ public class panelForPersonalAccount extends JPanel {
                     cmp = cmp.getParent();
                 }
                 ((JFrame) cmp).dispose();
-                windowsToLogin win = new windowsToLogin(language_convert.language_convertAll(), new DBBean());
+                windowsToLogin win = new windowsToLogin(resourceBundle, db);
                 win.setVisible(true);
                 win.setBounds(400, 250, 400, 300);
                 win.setResizable(false);

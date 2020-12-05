@@ -39,7 +39,7 @@ public class windowsToCreateItemForManager extends JFrame {
     private JTextField textField_addItem_outpriceDisplay;
     private windowsToCreateItemForManager a = this;
 
-    public windowsToCreateItemForManager(ResourceBundle resourceBundle,DBBean db, MyJPanel table, String belongto, JTextField total) {
+    public windowsToCreateItemForManager(ResourceBundle resourceBundle, MyJPanel table, JTextField total) {
         add_newItemString = resourceBundle.getString("add_newItemString");// 新增入库商品
         product_nameString = resourceBundle.getString("product_nameString");// 货物名称
         productNumString = resourceBundle.getString("productNumString");// 货物数量
@@ -134,7 +134,7 @@ public class windowsToCreateItemForManager extends JFrame {
         gbc_label_addItem_outprice.gridx = 1;
         gbc_label_addItem_outprice.gridy = 3;
         panel.add(label_addItem_outprice, gbc_label_addItem_outprice);
-        // 商品售价的Textfield
+        // 商品售价（零售）的Textfield
         textField_addItem_outpriceDisplay = new JTextField();
         GridBagConstraints gbc_textField_addItem_outpriceDisplay = new GridBagConstraints();
         gbc_textField_addItem_outpriceDisplay.insets = new Insets(0, 0, 5, 0);
@@ -144,23 +144,23 @@ public class windowsToCreateItemForManager extends JFrame {
         panel.add(textField_addItem_outpriceDisplay, gbc_textField_addItem_outpriceDisplay);
         textField_addItem_outpriceDisplay.setColumns(10);
 
+        // 商品售价（零售）的label
+        JLabel label_addItem_retailOutPrice = new JLabel("商品售价（零售）");
+        label_addItem_retailOutPrice.setFont(new Font("微软雅黑", Font.BOLD, 15));
+        label_addItem_retailOutPrice.setHorizontalAlignment(SwingConstants.RIGHT);
+        GridBagConstraints gbc_label_addItem_retailOutPrice = new GridBagConstraints();
+        gbc_label_addItem_retailOutPrice.insets = new Insets(0, 0, 0, 5);
+        gbc_label_addItem_retailOutPrice.gridx = 1;
+        gbc_label_addItem_retailOutPrice.gridy = 4;
+        panel.add(label_addItem_retailOutPrice, gbc_label_addItem_retailOutPrice);
 
-        JLabel label_addItem_focusRepository = new JLabel(targetStockString);
-        label_addItem_focusRepository.setFont(new Font("微软雅黑", Font.BOLD, 15));
-        label_addItem_focusRepository.setHorizontalAlignment(SwingConstants.RIGHT);
-        GridBagConstraints gbc_label_addItem_focusRepository = new GridBagConstraints();
-        gbc_label_addItem_focusRepository.insets = new Insets(0, 0, 0, 5);
-        gbc_label_addItem_focusRepository.gridx = 1;
-        gbc_label_addItem_focusRepository.gridy = 4;
-        panel.add(label_addItem_focusRepository, gbc_label_addItem_focusRepository);
-
-        JComboBox comboBox__addItem_focusRepository = new JComboBox();
-        GridBagConstraints gbc_comboBox__addItem_focusRepository = new GridBagConstraints();
-        gbc_comboBox__addItem_focusRepository.fill = GridBagConstraints.HORIZONTAL;
-        gbc_comboBox__addItem_focusRepository.gridx = 2;
-        gbc_comboBox__addItem_focusRepository.gridy = 4;
-        panel.add(comboBox__addItem_focusRepository, gbc_comboBox__addItem_focusRepository);
-
+        // 商品售价（零售）的textField
+        JTextField textField_addItem_retailOutPrice = new JTextField();
+        GridBagConstraints gbc_textField_addItem_retailOutPrice = new GridBagConstraints();
+        gbc_textField_addItem_retailOutPrice.fill = GridBagConstraints.HORIZONTAL;
+        gbc_textField_addItem_retailOutPrice.gridx = 2;
+        gbc_textField_addItem_retailOutPrice.gridy = 4;
+        panel.add(textField_addItem_retailOutPrice, gbc_textField_addItem_retailOutPrice);
 
 
         Box horizontalBox = Box.createHorizontalBox();
@@ -173,7 +173,15 @@ public class windowsToCreateItemForManager extends JFrame {
         button_addItem_confirm.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //todo
+                Vector<Object> temp = new Vector<>();
+                temp.add(textField_addItem_nameDisplay.getText()); temp.add(textField_addItem_numberDisplay.getText());
+                temp.add(textField_addItem_inpriceDisplay.getText()); temp.add(textField_addItem_outpriceDisplay.getText());
+                //todo @yzj 窗口里面多加一列 输入： 商品售价（批发）
+                temp.add(textField_addItem_outpriceDisplay.getText());
+                table.getModel().addRow(temp);
+                total.setText( String.valueOf( Float.parseFloat(total.getText()) +
+                        Float.parseFloat(textField_addItem_numberDisplay.getText()) *
+                                Float.parseFloat(textField_addItem_inpriceDisplay.getText()) ) ) ;
                 dispose();
             }
         });

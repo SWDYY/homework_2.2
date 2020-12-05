@@ -211,7 +211,7 @@ public class init_box {
                 }
                 else {
                     // 插入订单
-                    int id = db.executeQuery(belongto+"_order(Name,State,price_all,profit)",
+                    db.executeQuery(belongto+"_order(Name,State,price_all,profit)",
                             "'" + textField_addOrder_foundCustomerDisplay.getText() + "'," +
                                     "'" + op.op.StateConvert(table.getNext()) + "'," +
                                     Float.parseFloat(textField_addOrder_totalPriceDisplay.getText()) + "," +
@@ -219,21 +219,23 @@ public class init_box {
 
                     for (Object temp : table.getModel().getDataVector()) {
                         Vector<Object> v = (Vector<Object>)temp;
-                        // 中间表中插入物品
+                        String id = null;
+                        try {
+                            ResultSet temp1 = db.executeFindMAXID(belongto+"_order","ID");
+                            while(temp1.next()) id = temp1.getString("ID");
+                        } catch (SQLException throwables) { throwables.printStackTrace(); }
                         db.executeQuery(belongto+"_item_order(repository,order_id,item_name,num)",
                                 "'"+belongto+"'," +
-                                        // todo 如何得到这一单的id
-                                        "'"+String.valueOf(id)+"'," +
+                                        id + "," +
                                         "'"+v.get(0)+"'," +
                                         v.get(2));
-                        // todo 店员的时候关联库存
+                        if (table.getNext().equals("3")){
+                            // todo 店员的时候关联库存
+                        }
                     }
                     // 更新表
                     table.setData(new Vector<>());  // 本来就关联的table
-                    Vector<Object> nametemp = new Vector<>();
-                    nametemp.add("ID"); nametemp.add("Name"); nametemp.add("price_all"); nametemp.add("State");
-                    related[0].setData(returnVector.FromDBRead(db, belongto + "_order", nametemp, op.op.StateConvert(related[0].getNow()), "State"));  // 未付款的table
-                    related[1].setData(returnVector.FromDBReadAll(db, belongto + "_order", related[1].getTableName()));  // 所有订单列表
+                    refresh(belongto, related, db);
                     textField_addOrder_totalPriceDisplay.setText("0");
                 }
             }
@@ -261,8 +263,8 @@ public class init_box {
                 for (int i : table.getChange()){
                     System.out.println(i);
                     db.executeUpdate(String.valueOf(i), belongTo+"_order", "ID", "'"+op.op.StateConvert(table.getNext())+"'", "State");
-                    if (table.getNext().equals("待付款")) {/* todo 库存减少 */}
-                    if (table.getNext().equals("退货中")) {/* todo 库存增加 */ }
+                    if (table.getNext().equals("2")) {/* todo 库存减少 */}
+                    if (table.getNext().equals("4")) {/* todo 库存增加 */ }
                 }
                 // table从读
                 Vector<Object> nametemp = new Vector<>();
@@ -311,6 +313,7 @@ public class init_box {
             public void actionPerformed(ActionEvent e) {
                 button_orderList_delete.setEnabled(false);
                 db.executeDelete(textField_orderList_orderSearchDisplay.getText(), belongto+"_order", "ID");
+                while (db.executeDelete(textField_orderList_orderSearchDisplay.getText(), belongto+"_item_order", "order_id") == 1)
                 refresh(belongto, related, db);
             }
         });
@@ -341,7 +344,7 @@ public class init_box {
         // 下面的box
         JButton button_restore_save = new JButton(saveString);
         down.add(new JLabel(total_String));
-        JTextField textField_restore_totalBuyingPriceDisplay = new JTextField();
+        JTextField textField_restore_totalBuyingPriceDisplay = new JTextField("0");
         down.add(textField_restore_totalBuyingPriceDisplay);
         down.add(new JLabel(yuan_String));
         down.add(Box.createHorizontalStrut(240));
@@ -350,8 +353,7 @@ public class init_box {
         but_add.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // todo 经理添加
-                windowsToCreateItemForManager winToCreateItemForManager = new windowsToCreateItemForManager(resourceBundle, db, table, belongto, textField_restore_totalBuyingPriceDisplay);//1随便写的
+                windowsToCreateItemForManager winToCreateItemForManager = new windowsToCreateItemForManager(resourceBundle, table, textField_restore_totalBuyingPriceDisplay);
                 winToCreateItemForManager.setVisible(true);
                 winToCreateItemForManager.setBounds(470, 170, 400, 350);
                 winToCreateItemForManager.setResizable(false);
