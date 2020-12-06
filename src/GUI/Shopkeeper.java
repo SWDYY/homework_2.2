@@ -191,7 +191,7 @@ public class Shopkeeper extends JFrame {
         // todo @sxz
         name_stock_check.add("id"); name_stock_check.add("name");
         name_stock_check.add("num"); name_stock_check.add("outprice");
-        name_stock_check.add("outprice_wholesale"); name_stock_check.add("inprie");
+        name_stock_check.add("outprice_wholesale"); name_stock_check.add("inprice");
         stock_check = new MyJPanel(name_stock_check, 0,0);
         tabbedPane_stock.add(stock_check);
         tabbedPane_stock.addTab(check_stockString, stock_check);
@@ -229,6 +229,12 @@ public class Shopkeeper extends JFrame {
         temp = init.stock_in(stock_in, db, stock_check, belongto);
         stock_in.setUp(temp[0]); stock_in.setDown(temp[1]);
         stock_check.setUp(init.stock_check(stock_check, db, belongto));
+
+        order_uncheck.setClickable(true, resourceBundle, db, belongto);
+        order_unpaid.setClickable(true, resourceBundle, db, belongto);
+        order_finish.setClickable(true, resourceBundle, db, belongto);
+        order_returning.setClickable(true, resourceBundle, db, belongto);
+        order_all.setClickable(true, resourceBundle, db, belongto);
 
 
         // 读数据

@@ -416,7 +416,6 @@ public class init_box {
                     button_checkStock_delete.setEnabled(true);
                     table.setData(returnVector.FromDBRead(db, belongto, table.getTableName(),
                             textField_checkStock_searchDisplay.getText(), "name"));
-                    textField_checkStock_searchDisplay.setText("");
                 }
             }
         });
@@ -518,15 +517,51 @@ public class init_box {
         JLabel label_account = new JLabel("员工用户名/ID");
         JTextField textField_account = new JTextField();
         JButton button_search = new JButton("搜 索");
-        JButton button_change = new JButton("修 改");
+//        JButton button_change = new JButton("修 改");
         JButton button_delete = new JButton("删 除");
+        button_delete.setEnabled(false);
         JButton button_add = new JButton("+ 新增员工账户");
         horizontal_down.add(button_add);
         horizontal_up.add(label_account);
         horizontal_up.add(textField_account);
         horizontal_up.add(button_search);
-        horizontal_up.add(button_change);
+//        horizontal_up.add(button_change);
         horizontal_up.add(button_delete);
+
+        // 查找绑监听
+        button_search.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (textField_account.getText().equals("")){
+                    table.setData(returnVector.FromDBReadAll(db, "login", table.getTableName()));
+                }
+                else {
+                    button_delete.setEnabled(true);
+                    table.setData(returnVector.FromDBRead(db, "login", table.getTableName(), textField_account.getText(), "user_name"));
+                }
+            }
+        });
+        // 删除按钮绑监听
+        button_delete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                button_delete.setEnabled(false);
+                db.executeDelete(textField_account.getText(), "login", "user_name");
+                table.setData(returnVector.FromDBReadAll(db, "login", table.getTableName()));
+            }
+        });
+        // 新增客户绑监听
+        button_add.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                windowsForAddEmployeeAccount win = new windowsForAddEmployeeAccount(resourceBundle, db, table);
+                win.setVisible(true);
+                win.setBounds(470, 170, 400, 350);
+                win.setResizable(false);
+            }
+        });
+
+
 
         return verticalBox;
     }

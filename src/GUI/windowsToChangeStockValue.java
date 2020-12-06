@@ -53,7 +53,7 @@ public class windowsToChangeStockValue extends JFrame {
         JPanel panel_changeGoodsValue = new JPanel();
         panel_changeGoodsValue.setBorder(new EmptyBorder(30, 30, 30, 30));
         getContentPane().add(panel_changeGoodsValue, BorderLayout.CENTER);
-        panel_changeGoodsValue.setLayout(new GridLayout(6, 2, 0, 10));
+        panel_changeGoodsValue.setLayout(new GridLayout(7, 2, 0, 10));
 
         // ID
         JLabel Label_changeGoodsValue_goodsID = new JLabel(productIDString);
@@ -99,7 +99,7 @@ public class windowsToChangeStockValue extends JFrame {
 
         // 售价（批发）
         // todo @sxz
-        JLabel Label_changeGoodsValue_goodsWhole = new JLabel("总售价");
+        JLabel Label_changeGoodsValue_goodsWhole = new JLabel("售价批发");
         Label_changeGoodsValue_goodsWhole.setHorizontalAlignment(SwingConstants.CENTER);
         panel_changeGoodsValue.add(Label_changeGoodsValue_goodsWhole);
         textField_changeGoodsValue_goodsWholeDisplay = new JTextField();

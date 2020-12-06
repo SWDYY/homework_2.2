@@ -10,6 +10,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ResourceBundle;
@@ -108,8 +110,24 @@ public class panelForPersonalAccount extends JPanel {
         Component horizontalGlue = Box.createHorizontalGlue();
         horizontalBox.add(horizontalGlue);
 
-        //
+
         JButton Button_changePassword_save = new JButton(confirmString);
+        Button_changePassword_save.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (db.executeFind(textField_changePassword_oldPassword.getText(), "login", "user_password") != null){
+                    db.executeUpdate(textField_changePassword_oldPassword.getText(), "login", "user_password",
+                            textField_changePassword_newPassword.getText(), "user_password");
+                    textField_changePassword_oldPassword.setText("");
+                }
+                else{
+                    JTextArea aboutarea = new JTextArea();
+                    aboutarea.setText("密码输入错误！\n");
+                    JOptionPane.showConfirmDialog(null,aboutarea,"Error!",JOptionPane.PLAIN_MESSAGE);
+                    textField_changePassword_oldPassword.setText("");
+                }
+            }
+        });
         horizontalBox.add(Button_changePassword_save);
 
         Component horizontalGlue_1 = Box.createHorizontalGlue();
@@ -117,6 +135,7 @@ public class panelForPersonalAccount extends JPanel {
 
         Component verticalStrut = Box.createVerticalStrut(20);
         horizontalBox.add(verticalStrut);
+
 
         //”退出登录“界面
         JPanel panel_logout = new JPanel();

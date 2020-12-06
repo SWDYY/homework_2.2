@@ -163,6 +163,7 @@ public class Manager extends JFrame {
         // 添加box
         customer.setUp(init.customer(customer, db));
         order.setUp(init.order_check(order, db, new MyJPanel[]{order}, belongto));
+//        order.setClickable(true, resourceBundle, db, belongto);
         Box[] temp = init.stock_in(stock_in, db, stock_check, belongto);
         stock_in.setUp(temp[0]); stock_in.setDown(temp[1]);
         stock_check.setUp(init.stock_check(stock_check, db, belongto));

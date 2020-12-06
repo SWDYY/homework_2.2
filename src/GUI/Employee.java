@@ -130,6 +130,7 @@ public class Employee extends JFrame {
         order_new.setUp(temp[0]);
         order_new.setDown(temp[1]);
         order_all.setUp(init.order_check(order_all, db, new MyJPanel[]{order_all}, belongto));
+        order_all.setClickable(true, resourceBundle, db, belongto);
 
         // 设置数据
         product.setData(returnVector.FromDBReadAll(db, belongTo, name_product));

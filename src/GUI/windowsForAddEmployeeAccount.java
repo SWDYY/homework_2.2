@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import Bean.DBBean;
+import op.returnVector;
 
 /**
  * 权限：经理
@@ -38,7 +39,7 @@ public class windowsForAddEmployeeAccount extends JFrame {
     private JTextField textField_addAccount_usernameDisplay;
     private JTextField textField_addAccount_phoneNumberDisplay;
 
-    public windowsForAddEmployeeAccount(ResourceBundle resourceBundle,DBBean db) {
+    public windowsForAddEmployeeAccount(ResourceBundle resourceBundle, DBBean db, MyJPanel table) {
         phoneString = resourceBundle.getString("phoneString");// 联系方式
         positionString = resourceBundle.getString("positionString");// 职位
         shopkeeperString = resourceBundle.getString("shopkeeperString");// 店长
@@ -255,7 +256,7 @@ public class windowsForAddEmployeeAccount extends JFrame {
                                     +new_repository_name+"'");
 
                 }
-
+                table.setData(returnVector.FromDBReadAll(db, "login", table.getTableName()));
                 dispose();
             }
         });

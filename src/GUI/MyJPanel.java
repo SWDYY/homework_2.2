@@ -1,10 +1,12 @@
 package GUI;
 
-import java.awt.BorderLayout;
-import java.util.HashSet;
+import Bean.DBBean;
+
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
-import java.util.Vector;
 
 import javax.swing.Box;
 import javax.swing.JPanel;
@@ -137,4 +139,25 @@ public class MyJPanel extends JPanel{
         this.ScrollPane.setViewportView(this.table);
     }
 
+
+    public void setClickable(boolean flag, ResourceBundle resourceBundle, DBBean db, String belongto){
+        if (flag){
+            table.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    if (e.getClickCount() == 2){
+                        Point p = e.getPoint();
+                        int row = table.rowAtPoint(p);
+                        Object temp = ((Vector<Object>)model.getDataVector()).get(row);
+                        int id = Integer.parseInt( (String)((Vector<Object>)temp).get(0) );
+                        windowsToShowOrderItem win = new windowsToShowOrderItem(resourceBundle, db, id, belongto);
+                        win.setVisible(true);
+                        win.setSize(1000, 1000);
+                        win.setLocationRelativeTo(null);
+                        win.setResizable(false);
+                    }
+                }
+            });
+        }
+    }
 }
