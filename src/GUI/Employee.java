@@ -113,7 +113,7 @@ public class Employee extends JFrame {
         tabbedPane_sell.addTab(panel_cashieringString, order_unpaid);
 
         /***查看订单列表secondPanel***/
-        Vector<Object> name_order = returnVector.getHeadName(db, belongTo+"_order");
+        Vector<Object> name_order = new Vector<>();
         name_order.add("ID"); name_order.add("Name");
         name_order.add("price_all");
         order_all = new MyJPanel(name_order, 0,0);

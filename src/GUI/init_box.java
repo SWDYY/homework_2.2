@@ -454,7 +454,7 @@ public class init_box {
 
     /**
      * 初始化 库存转移 中的box
-     *
+     * todo
      * @param table 关联的table
      * @param db    关联的数据库
      * @return 初始化完成的box

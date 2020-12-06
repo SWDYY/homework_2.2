@@ -97,7 +97,8 @@ public class Shopkeeper extends JFrame {
         /***货品Panel***/
         Vector<Object> name_product = new Vector<>();
         // todo @sxz
-        name_product.add("ID"); name_product.add("Name"); name_product.add("Outprice");
+        name_product.add("ID"); name_product.add("Name");
+        name_product.add("outprice"); name_product.add("outprice_wholesale");
         product = new MyJPanel(name_product, 0,0);
         tabbedPane_all.add(product);
         tabbedPane_all.addTab(myJPanel_productString, product);
@@ -106,7 +107,6 @@ public class Shopkeeper extends JFrame {
         /***客户Panel***/
         Vector<Object> name_customer = new Vector<>();
         // todo @sxz
-        // todo returnVector.getname 不能调这个函数，因为这个调了之后字典里面加不上，也就是做不了多语言
         name_customer.add("ID"); name_customer.add("name");
         name_customer.add("phonenumber"); name_customer.add("classification");
         customer = new MyJPanel(name_customer, 0,0);
@@ -182,7 +182,6 @@ public class Shopkeeper extends JFrame {
         name_stock_in.add("物品名"); name_stock_in.add("数量");
         name_stock_in.add("进价"); name_stock_in.add("售价");
         name_stock_in.add("售价（批发）");
-        // todo 店长与经理
         stock_in = new MyJPanel(name_stock_in, 0,0);
         tabbedPane_stock.add(stock_in);
         tabbedPane_stock.addTab(inStockStirng, stock_in);
