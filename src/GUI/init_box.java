@@ -231,7 +231,7 @@ public class init_box {
                                         "'"+v.get(0)+"'," +
                                         v.get(2));
                         if (table.getNext().equals("3")){
-                            // todo 店员的时候关联库存
+                            // todo 店员开单的时候关联库存 @wkr，这个是店员开单的时候，temp已经是一行物品了了
                         }
                     }
                     // 更新表
@@ -264,7 +264,7 @@ public class init_box {
                 for (int i : table.getChange()){
                     System.out.println(i);
                     db.executeUpdate(String.valueOf(i), belongTo+"_order", "ID", "'"+op.op.StateConvert(table.getNext())+"'", "State");
-                    if (table.getNext().equals("2")) {/* todo 库存减少 */}
+                    if (table.getNext().equals("2")) {/* todo 库存减少 @wkr 这个是店长状态转移的时候与库存的关联*/}
                     if (table.getNext().equals("4")) {/* todo 库存增加 */ }
                 }
                 // table从读

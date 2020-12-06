@@ -108,6 +108,7 @@ public class panelForPersonalAccount extends JPanel {
         Component horizontalGlue = Box.createHorizontalGlue();
         horizontalBox.add(horizontalGlue);
 
+        //
         JButton Button_changePassword_save = new JButton(confirmString);
         horizontalBox.add(Button_changePassword_save);
 
