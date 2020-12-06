@@ -1,6 +1,7 @@
 package GUI;
 
 import Bean.DBBean;
+import op.returnVector;
 //import op.returnVector;
 
 import javax.swing.*;
@@ -31,11 +32,13 @@ public class windowsToChangeStockValue extends JFrame {
     private JTextField textField_changeGoodsValue_goodNameDisplay;
     private JTextField textField_changeGoodsValue_goodsInpriceDisplay;
     private JTextField textField_changeGoodsValue_goodsOutpriceDisplay;
+    private JTextField textField_changeGoodsValue_goodsWholeDisplay;
     private JTextField textField_changeGoodsValue_goodsIDDisplay;
     private JTextField textField_changeGoodsValue_goodsNumberDisplay;
+
     private windowsToChangeStockValue a = this;
 
-    public windowsToChangeStockValue(ResourceBundle resourceBundle,DBBean db) {
+    public windowsToChangeStockValue(ResourceBundle resourceBundle,DBBean db, MyJPanel table, String belongto, String name) {
         changeFigureString = resourceBundle.getString("changeFigureString");// 修改货物属性
         productIDString = resourceBundle.getString("productIDString");// 货物ID
         product_nameString = resourceBundle.getString("product_nameString");// 货品名称
@@ -44,14 +47,7 @@ public class windowsToChangeStockValue extends JFrame {
         productOutpriceString = resourceBundle.getString("productOutpriceString");//// 商品售价
         button_account_changeString = resourceBundle.getString("button_account_changeString");// 修改
         cancel = resourceBundle.getString("cancel");// 取   消
-        //public windowsToChangeStockValue(DBBean db, JScrollPane scrollPane, ResultSet resultSet) {
-        /**
-         try {
-         resultSet.next();
-         } catch (SQLException throwables) {
-         throwables.printStackTrace();
-         }
-         **/
+
         setTitle(changeFigureString);
 
         JPanel panel_changeGoodsValue = new JPanel();
@@ -59,108 +55,85 @@ public class windowsToChangeStockValue extends JFrame {
         getContentPane().add(panel_changeGoodsValue, BorderLayout.CENTER);
         panel_changeGoodsValue.setLayout(new GridLayout(6, 2, 0, 10));
 
+        // ID
         JLabel Label_changeGoodsValue_goodsID = new JLabel(productIDString);
         Label_changeGoodsValue_goodsID.setHorizontalAlignment(SwingConstants.CENTER);
         panel_changeGoodsValue.add(Label_changeGoodsValue_goodsID);
-
-        //货物ID  显示框
         textField_changeGoodsValue_goodsIDDisplay = new JTextField();
-        /**
-         try {
-         textField_changeGoodsValue_goodsIDDisplay.setText(String.valueOf(resultSet.getObject("id")));
-         } catch (SQLException throwables) {
-         throwables.printStackTrace();
-         }
-         **/
         textField_changeGoodsValue_goodsIDDisplay.setEditable(false);
         panel_changeGoodsValue.add(textField_changeGoodsValue_goodsIDDisplay);
         textField_changeGoodsValue_goodsIDDisplay.setColumns(10);
 
+        // 名称
         JLabel Label_changeGoodsValue_goodsName = new JLabel(product_nameString);
         Label_changeGoodsValue_goodsName.setHorizontalAlignment(SwingConstants.CENTER);
         panel_changeGoodsValue.add(Label_changeGoodsValue_goodsName);
-
-        //货物名称  显示框
         textField_changeGoodsValue_goodNameDisplay = new JTextField();
         textField_changeGoodsValue_goodNameDisplay.setColumns(10);
         textField_changeGoodsValue_goodNameDisplay.setEditable(false);
-
-        /**
-         try {
-         textField_changeGoodsValue_goodNameDisplay.setText(String.valueOf(resultSet.getObject("name")));
-         } catch (SQLException throwables) {
-         throwables.printStackTrace();
-         };
-         **/
         panel_changeGoodsValue.add(textField_changeGoodsValue_goodNameDisplay);
 
-
+        // 数量
         JLabel Label_changeGoodsValue_goodsNumber = new JLabel(productNumString);
         Label_changeGoodsValue_goodsNumber.setHorizontalAlignment(SwingConstants.CENTER);
         panel_changeGoodsValue.add(Label_changeGoodsValue_goodsNumber);
-
-        //货物数量  显示框
         textField_changeGoodsValue_goodsNumberDisplay = new JTextField();
-
-        /**try {
-         textField_changeGoodsValue_goodsNumberDisplay.setText(String.valueOf(resultSet.getObject("num")));
-         } catch (SQLException throwables) {
-         throwables.printStackTrace();
-         }**/
         panel_changeGoodsValue.add(textField_changeGoodsValue_goodsNumberDisplay);
         textField_changeGoodsValue_goodsNumberDisplay.setColumns(10);
 
+        // 进价
         JLabel Label_changeGoodsValue_goodsInprice = new JLabel(productInpriceString);
         Label_changeGoodsValue_goodsInprice.setHorizontalAlignment(SwingConstants.CENTER);
         panel_changeGoodsValue.add(Label_changeGoodsValue_goodsInprice);
-
-        //商品进价  显示框
         textField_changeGoodsValue_goodsInpriceDisplay = new JTextField();
-        /**
-         try {
-         textField_changeGoodsValue_goodsInpriceDisplay.setText(String.valueOf(resultSet.getObject("inprice")));
-         } catch (SQLException throwables) {
-         throwables.printStackTrace();
-         }
-         **/
         panel_changeGoodsValue.add(textField_changeGoodsValue_goodsInpriceDisplay);
         textField_changeGoodsValue_goodsInpriceDisplay.setColumns(10);
 
+        // 售价（零售）
         JLabel Label_changeGoodsValue_goodsOutprice = new JLabel(productOutpriceString);
         Label_changeGoodsValue_goodsOutprice.setHorizontalAlignment(SwingConstants.CENTER);
         panel_changeGoodsValue.add(Label_changeGoodsValue_goodsOutprice);
-
-        //商品售价   显示框
         textField_changeGoodsValue_goodsOutpriceDisplay = new JTextField();
-        /**
-         try {
-         textField_changeGoodsValue_goodsOutpriceDisplay.setText(String.valueOf(resultSet.getObject("outprice")));
-         } catch (SQLException throwables) {
-         throwables.printStackTrace();
-         }
-         **/
         panel_changeGoodsValue.add(textField_changeGoodsValue_goodsOutpriceDisplay);
         textField_changeGoodsValue_goodsOutpriceDisplay.setColumns(10);
+
+        // 售价（批发）
+        // todo @sxz
+        JLabel Label_changeGoodsValue_goodsWhole = new JLabel("总售价");
+        Label_changeGoodsValue_goodsWhole.setHorizontalAlignment(SwingConstants.CENTER);
+        panel_changeGoodsValue.add(Label_changeGoodsValue_goodsWhole);
+        textField_changeGoodsValue_goodsWholeDisplay = new JTextField();
+        panel_changeGoodsValue.add(textField_changeGoodsValue_goodsWholeDisplay);
+        textField_changeGoodsValue_goodsWholeDisplay.setColumns(10);
+
+        // 读货品的数据
+        ResultSet findres = db.executeFind(name, belongto, "name");
+        try{
+            while (findres.next()) {
+                textField_changeGoodsValue_goodsIDDisplay.setText(findres.getString("id"));
+                textField_changeGoodsValue_goodNameDisplay.setText(name);
+                textField_changeGoodsValue_goodsNumberDisplay.setText(findres.getString("num"));
+                textField_changeGoodsValue_goodsInpriceDisplay.setText(findres.getString("inprie"));
+                textField_changeGoodsValue_goodsOutpriceDisplay.setText(findres.getString("outprice"));
+                textField_changeGoodsValue_goodsWholeDisplay.setText(findres.getString("outprice_wholesale"));
+            }
+        } catch (SQLException throwables){
+            throwables.printStackTrace();
+        }
 
         JButton Button_changeGoodsValue_change = new JButton(button_account_changeString);
         panel_changeGoodsValue.add(Button_changeGoodsValue_change);
         Button_changeGoodsValue_change.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO Auto-generated method stub
-                /**
-                 db.executeUpdate(textField_changeGoodsValue_goodsIDDisplay.getText(),"itemmanager","id",textField_changeGoodsValue_goodsNumberDisplay.getText(),"num");
-                 db.executeUpdate(textField_changeGoodsValue_goodsIDDisplay.getText(),"itemmanager","id",textField_changeGoodsValue_goodsInpriceDisplay.getText(),"inprice");
-                 db.executeUpdate(textField_changeGoodsValue_goodsIDDisplay.getText(),"itemmanager","id",textField_changeGoodsValue_goodsOutpriceDisplay.getText(),"outprice");
-                 //table刷新
-                 Vector<Object> name = new Vector<>(Arrays.asList("id", "name", "num", "inprice"));
-                 Vector<Vector<Object>> data = returnVector.FromDBReadAll(db,"itemmanager",name);
-                 DefaultTableModel_noEditable model = new DefaultTableModel_noEditable(data, name, 5);
-                 JTable table = new JTable();
-                 table.setModel(model);
-                 scrollPane.setViewportView(table);
-                 **/
+                // 改数据库
+                db.executeUpdate(textField_changeGoodsValue_goodsIDDisplay.getText(),belongto,"id",textField_changeGoodsValue_goodsNumberDisplay.getText(),"num");
+                db.executeUpdate(textField_changeGoodsValue_goodsIDDisplay.getText(),belongto,"id",textField_changeGoodsValue_goodsInpriceDisplay.getText(),"inprie");
+                db.executeUpdate(textField_changeGoodsValue_goodsIDDisplay.getText(),belongto,"id",textField_changeGoodsValue_goodsOutpriceDisplay.getText(),"outprice");
+                db.executeUpdate(textField_changeGoodsValue_goodsIDDisplay.getText(),belongto,"id",textField_changeGoodsValue_goodsWholeDisplay.getText(),"outprice_wholesale");
+
+                //table刷新
+                table.setData(returnVector.FromDBReadAll(db, belongto, table.getTableName()));
                 dispose();
             }
 

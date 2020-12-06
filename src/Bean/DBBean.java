@@ -203,7 +203,7 @@ public class DBBean {
     /**
      *向数据库中插入一个数据
      * @param table_name    数据库的表名及参数名   eg:table(id,name,age)
-     * @param value         要传入的值   字符串需要打单引号          eg:1,'sxz',20
+         * @param value         要传入的值   字符串需要打单引号          eg:1,'sxz',20
      * dbBean.execQuery("nameandpassword(user_name,user_password,age)","'yzj','654321',10");
      */
     public int executeQuery(String table_name, String value){

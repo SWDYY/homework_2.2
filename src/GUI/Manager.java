@@ -68,6 +68,7 @@ public class Manager extends JFrame {
             org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();}
         catch(Exception e){}
 
+
         /***货品Panel***/
         Vector<Object> name_product = new Vector<>();
         name_product.add("ID"); name_product.add("Name");
@@ -126,7 +127,7 @@ public class Manager extends JFrame {
         name_stock_check.add("3");
         name_stock_check.add("4");
         stock_check = new MyJPanel(name_stock_check, 0,0);
-        stock_check.setUp(init.stock_check(stock_check, db));
+        stock_check.setUp(init.stock_check(stock_check, db, "asd"));
         tabbedPane_stock.add(stock_check);
         tabbedPane_stock.addTab(check_stockString, stock_check);
 

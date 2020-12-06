@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
@@ -363,7 +364,14 @@ public class init_box {
         button_restore_save.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // todo 更新表和数据库
+                // 更新数据库
+                for (Object temp : table.getModel().getDataVector()) {
+                    Vector<Object> v = (Vector<Object>)temp;
+                    db.executeQuery( belongto+"(name,outprice,inprie,num,outprice_wholesale)", "'"+v.get(0)+"',"+v.get(3)+","+v.get(2)+","+v.get(1)+","+v.get(4) );
+                }
+                // 重读
+                table.setData(new Vector<>());
+                stock.setData(returnVector.FromDBReadAll(db, belongto, stock.getTableName()));
             }
         });
 
@@ -380,7 +388,7 @@ public class init_box {
      * @param db    关联的数据库
      * @return 初始化完成的box
      */
-    public Box stock_check(MyJPanel table, DBBean db) {
+    public Box stock_check(MyJPanel table, DBBean db, String belongto) {
         Box res = Box.createVerticalBox();
 
         // 下拉菜单
@@ -396,27 +404,41 @@ public class init_box {
         JButton button_checkStock_search = new JButton(button_account_searchString);
         JButton button_checkStock_change = new JButton(button_account_changeString);
         JButton button_checkStock_delete = new JButton(button_account_deleteString);
+        button_checkStock_change.setEnabled(false);
+        button_checkStock_delete.setEnabled(false);
         button_checkStock_search.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // todo 修改table
+                if (textField_checkStock_searchDisplay.getText().equals(""))
+                    table.setData(returnVector.FromDBReadAll(db, belongto, table.getTableName()));
+                else {
+                    button_checkStock_change.setEnabled(true);
+                    button_checkStock_delete.setEnabled(true);
+                    table.setData(returnVector.FromDBRead(db, belongto, table.getTableName(),
+                            textField_checkStock_searchDisplay.getText(), "name"));
+                    textField_checkStock_searchDisplay.setText("");
+                }
             }
         });
         button_checkStock_change.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                windowsToChangeStockValue winToChangeStockValue = new windowsToChangeStockValue(resourceBundle,db);
+                button_checkStock_change.setEnabled(false);
+                button_checkStock_delete.setEnabled(false);
+                windowsToChangeStockValue winToChangeStockValue = new windowsToChangeStockValue(resourceBundle,db, table, belongto, textField_checkStock_searchDisplay.getText());
                 winToChangeStockValue.setVisible(true);
                 winToChangeStockValue.setBounds(470, 170, 400, 350);
                 winToChangeStockValue.setResizable(false);
                 winToChangeStockValue.setTitle(change_product_inStockString);
-                // todo 修改数据库、table
             }
         });
         button_checkStock_delete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // todo 修改数据库、table
+                button_checkStock_change.setEnabled(false);
+                button_checkStock_delete.setEnabled(false);
+                db.executeDelete(textField_checkStock_searchDisplay.getText(), belongto, "name");
+                table.setData(returnVector.FromDBReadAll(db, belongto, table.getTableName()));
             }
         });
         down.add(button_checkStock_search);
@@ -522,8 +544,8 @@ public class init_box {
         int i = 0;
         for (MyJPanel temp : all) {
             if (i == 0) temp.setData(returnVector.FromDBReadAll(db, belongto+"_order", temp.getTableName()));  // 总订单
-            else if (i == 6) {/* todo 库存从读 */}
-            else if (temp != null) temp.setData(returnVector.FromDBRead(db, belongto+"_order", nametemp, StateConvert(temp.getNow()), "State"));
+            else if (i == 6) {temp.setData(returnVector.FromDBReadAll(db, belongto, temp.getTableName()));}  // 库存
+            else if (temp != null) temp.setData(returnVector.FromDBRead(db, belongto+"_order", nametemp, StateConvert(temp.getNow()), "State"));  // 状态订单
             i++;
         }
     }

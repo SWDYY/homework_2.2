@@ -201,8 +201,9 @@ public class Shopkeeper extends JFrame {
         /***账户Panel***/
         Vector<Object> name_account = new Vector<>();
         // todo @sxz
-        name_account.add("ID"); name_account.add("员工名");
-        name_account.add("账户"); name_account.add("密码");
+        name_account.add("id"); name_account.add("user_name");
+        name_account.add("user_password"); name_account.add("phonenum");
+        name_account.add("authority"); name_account.add("belongto");
         account = new MyJPanel(name_account, 0,0);
         tabbedPane_all.add(account);
         tabbedPane_all.addTab(AccountSring, account);
@@ -228,8 +229,7 @@ public class Shopkeeper extends JFrame {
         order_all.setUp(init.order_check(order_all, db, related, belongTo));
         temp = init.stock_in(stock_in, db, stock_check, belongto);
         stock_in.setUp(temp[0]); stock_in.setDown(temp[1]);
-        stock_check.setUp(init.stock_check(stock_check, db));
-        // todo 账户的按钮
+        stock_check.setUp(init.stock_check(stock_check, db, belongto));
 
 
         // 读数据
@@ -240,7 +240,9 @@ public class Shopkeeper extends JFrame {
         }
         order_all.setData(returnVector.FromDBReadAll(db, belongTo+"_order", name_nochange));
         stock_check.setData(returnVector.FromDBReadAll(db, belongTo, name_stock_check));
-        // todo 员工管理的数据库没写。。。。。account.setData();
+        Vector<Object> nametemp = new Vector<>();
+        nametemp.add("user_name");
+        account.setData(returnVector.FromDBRead(db, "login", account.getTableName(), belongTo, "belongto"));
     }
 
     public String getBelongto() { return this.belongto; }
