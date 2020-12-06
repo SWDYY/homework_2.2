@@ -216,10 +216,10 @@ public class Shopkeeper extends JFrame {
 
         // 设置box
         MyJPanel[] related = {order_all, order_uncheck, order_unpaid, order_finish,
-                               order_returning, order_returned/*, stock_check*/};
+                               order_returning, order_returned, stock_check};
         // todo 更新清单时库存更新
         customer.setUp(init.customer(customer, db));
-        Box[] temp = init.order_new(order_new, db, new MyJPanel[]{order_uncheck, order_all}, belongto);
+        Box[] temp = init.order_new(order_new, db, new MyJPanel[]{order_all, order_uncheck}, belongto);
         order_new.setUp(temp[0]); order_new.setDown(temp[1]);
         order_uncheck.setDown(init.order_check_but(order_uncheck, db, related, belongto));
         order_unpaid.setDown(init.order_check_but(order_unpaid, db, related, belongto));

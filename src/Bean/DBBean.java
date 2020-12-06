@@ -70,7 +70,7 @@ public class DBBean {
                     "(id int NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
                     "name varchar(100) NOT NULL UNIQUE KEY" +
                     ",outprice float NOT NULL" +
-                    ",inprie float," +
+                    ",inprice float NOT NULL," +
                     "num int NOT NULL," +
                     "outprice_wholesale float NOT NULL)";
         }
@@ -203,7 +203,7 @@ public class DBBean {
     /**
      *向数据库中插入一个数据
      * @param table_name    数据库的表名及参数名   eg:table(id,name,age)
-         * @param value         要传入的值   字符串需要打单引号          eg:1,'sxz',20
+     * @param value         要传入的值   字符串需要打单引号          eg:1,'sxz',20
      * dbBean.execQuery("nameandpassword(user_name,user_password,age)","'yzj','654321',10");
      */
     public int executeQuery(String table_name, String value){
@@ -229,9 +229,8 @@ public class DBBean {
         }
     }
 
-
     /**
-     * 返回tablename表的最大ID  也就是最新添加的一行数据
+     *    返回tablename表的最大ID  也就是最新添加的一行数据
      * @param tableName   想要查询的数据库的表名
      * @param type   输入”id“表示ID列的字段为小写id,输入”ID”表示ID列的字段为大写ID
      * @return  返回查询到的行

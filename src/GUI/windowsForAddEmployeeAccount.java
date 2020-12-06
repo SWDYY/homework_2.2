@@ -16,8 +16,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.Vector;
+
 import Bean.DBBean;
-import op.returnVector;
 
 /**
  * 权限：经理
@@ -39,7 +40,7 @@ public class windowsForAddEmployeeAccount extends JFrame {
     private JTextField textField_addAccount_usernameDisplay;
     private JTextField textField_addAccount_phoneNumberDisplay;
 
-    public windowsForAddEmployeeAccount(ResourceBundle resourceBundle, DBBean db, MyJPanel table) {
+    public windowsForAddEmployeeAccount(ResourceBundle resourceBundle,DBBean db,MyJPanel table) {
         phoneString = resourceBundle.getString("phoneString");// 联系方式
         positionString = resourceBundle.getString("positionString");// 职位
         shopkeeperString = resourceBundle.getString("shopkeeperString");// 店长
@@ -49,6 +50,7 @@ public class windowsForAddEmployeeAccount extends JFrame {
         cancel = resourceBundle.getString("cancel");// 取   消
         user_name = resourceBundle.getString("user_name");//用户名
 
+        setTitle("新建用户");
         JPanel panel_total = new JPanel();
         panel_total.setLayout(new BorderLayout());
         this.add(panel_total);
@@ -123,17 +125,19 @@ public class windowsForAddEmployeeAccount extends JFrame {
         JRadioButton radioButton_addAccount_shopkeeper = new JRadioButton(shopkeeperString);
         horizontalBox_addAccount_choosePosition.add(radioButton_addAccount_shopkeeper);
 
-        ArrayList<String> repository_name_list=new ArrayList<String>();
-        ResultSet repository_name_all=db.executeFindAll("repository_name");
-        try {
-            while(repository_name_all.next()){
-                repository_name_list.add(repository_name_all.getString("name"));
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        String[] repository_name = new String[repository_name_list.size()];
-        repository_name_list.toArray(repository_name);
+//        ArrayList<String> repository_name_list=new ArrayList<String>();
+//        ResultSet repository_name_all=db.executeFindAll("repository_name");
+//        try {
+//            while(repository_name_all.next()){
+//                repository_name_list.add(repository_name_all.getString("name"));
+//            }
+//        } catch (SQLException throwables) {
+//            throwables.printStackTrace();
+//        }
+//        String[] repository_name = new String[repository_name_list.size()];
+//        repository_name_list.toArray(repository_name);
+        String[] repository_name =windowsForAddEmployeeAccount.jcombobox_string(db,
+                "repository_name","name");
         JComboBox comboBox_addAccount_chooseLocation = new JComboBox(repository_name);
         GridBagConstraints gbc_comboBox_addAccount_chooseLocation = new GridBagConstraints();
         gbc_comboBox_addAccount_chooseLocation.fill = GridBagConstraints.BOTH;
@@ -212,23 +216,6 @@ public class windowsForAddEmployeeAccount extends JFrame {
         gbc_label_addAccount_location.gridy = 4;
         panel.add(label_addAccount_location, gbc_label_addAccount_location);
 
-//        ArrayList<String> repository_name_list=new ArrayList<String>();
-//        ResultSet repository_name_all=db.executeFindAll("repository_name");
-//        try {
-//            while(repository_name_all.next()){
-//                repository_name_list.add(repository_name_all.getString("name"));
-//            }
-//        } catch (SQLException throwables) {
-//            throwables.printStackTrace();
-//        }
-//        String[] repository_name = new String[repository_name_list.size()];
-//        repository_name_list.toArray(repository_name);
-//        JComboBox comboBox_addAccount_chooseLocation = new JComboBox(repository_name);
-//        GridBagConstraints gbc_comboBox_addAccount_chooseLocation = new GridBagConstraints();
-//        gbc_comboBox_addAccount_chooseLocation.fill = GridBagConstraints.BOTH;
-//        gbc_comboBox_addAccount_chooseLocation.gridx = 2;
-//        gbc_comboBox_addAccount_chooseLocation.gridy = 4;
-//        panel.add(comboBox_addAccount_chooseLocation, gbc_comboBox_addAccount_chooseLocation);
 
         /***底部按钮***/
         Box horizontalBox = Box.createHorizontalBox();
@@ -236,17 +223,20 @@ public class windowsForAddEmployeeAccount extends JFrame {
 
         Component horizontalGlue_left = Box.createHorizontalGlue();
         horizontalBox.add(horizontalGlue_left);
-
         JButton button_addAccount_save = new JButton(saveString);
         button_addAccount_save.addActionListener(new ActionListener() {
             @Override
 
             public void actionPerformed(ActionEvent e) {
+                Vector<String> data=new Vector<String>();
+                data.add(textField_addAccount_usernameDisplay.getText());
+                data.add(textField_addAccount_phoneNumberDisplay.getText());
                 if(radioButton_addAccount_employee.isSelected()){
                     db.executeQuery("login(user_name,user_password,phonenum,authority,belongto)",
                             "'"+textField_addAccount_usernameDisplay.getText() +"','123456','"
                                     +textField_addAccount_phoneNumberDisplay.getText()+"','employee','"
                                     +comboBox_addAccount_chooseLocation.getSelectedItem()+"'");
+                    data.add("employee");
                 }
                 else if(radioButton_addAccount_shopkeeper.isSelected()){
 
@@ -254,9 +244,10 @@ public class windowsForAddEmployeeAccount extends JFrame {
                             "'"+textField_addAccount_usernameDisplay.getText() +"','123456','"
                                     +textField_addAccount_phoneNumberDisplay.getText()+"','shopkeeper','"
                                     +new_repository_name+"'");
-
+                    data.add("shopkeeper");
                 }
-                table.setData(returnVector.FromDBReadAll(db, "login", table.getTableName()));
+                data.add(String.valueOf(comboBox_addAccount_chooseLocation.getSelectedItem()));
+                table.getModel().addRow(data);
                 dispose();
             }
         });
@@ -276,5 +267,19 @@ public class windowsForAddEmployeeAccount extends JFrame {
 
         Component horizontalGlue_right = Box.createHorizontalGlue();
         horizontalBox.add(horizontalGlue_right);
+    }
+    public static String[] jcombobox_string(DBBean db,String tablename,String index){
+        ArrayList<String> jcombobox_string_list=new ArrayList<String>();
+        ResultSet repository_name_all=db.executeFindAll(tablename);
+        try {
+            while(repository_name_all.next()){
+                jcombobox_string_list.add(repository_name_all.getString(index));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        String[] jcombobox_string = new String[jcombobox_string_list.size()];
+        jcombobox_string_list.toArray(jcombobox_string);
+        return jcombobox_string;
     }
 }

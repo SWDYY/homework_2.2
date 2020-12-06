@@ -130,15 +130,12 @@ public class Manager extends JFrame {
         tabbedPane_stock.addTab(check_stockString, stock_check);
 
 
-        // todo
         /***货品调配***/
         Vector<Object> name_stock_transfor = new Vector<>();
-        name_stock_transfor.add("todo");
-        name_stock_transfor.add("2");
-        name_stock_transfor.add("3");
-        name_stock_transfor.add("4");
+        name_stock_transfor.add("货品名称"); name_stock_transfor.add("数量");
         stock_trans = new MyJPanel(name_stock_transfor, 0,0);
-        stock_trans.setUp(init.stock_trans(stock_trans, db));
+        String[] repository_str={"",""};
+        stock_trans.setUp(init.stock_trans(stock_trans, db,repository_str));
         tabbedPane_stock.add(stock_trans);
         tabbedPane_stock.addTab(product_sendStirng, stock_trans);
 

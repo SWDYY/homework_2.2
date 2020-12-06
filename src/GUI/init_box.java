@@ -264,8 +264,42 @@ public class init_box {
                 for (int i : table.getChange()){
                     System.out.println(i);
                     db.executeUpdate(String.valueOf(i), belongTo+"_order", "ID", "'"+op.op.StateConvert(table.getNext())+"'", "State");
-                    if (table.getNext().equals("2")) {/* todo 库存减少 @wkr 这个是店长状态转移的时候与库存的关联*/}
-                    if (table.getNext().equals("4")) {/* todo 库存增加 */ }
+                    try {
+                        ResultSet mid = db.executeFind(String.valueOf(i), belongTo+"_item_order", "order_id");
+                        mid.next();
+                        String item_name = mid.getString("item_name");
+                        int buy_num=Integer.valueOf(mid.getString("num"));
+                        ResultSet tmp = db.executeFind(item_name ,belongTo, "name");
+                        if (table.getNext().equals("2")) {
+                            if(!tmp.next()){
+                                JTextArea area = new JTextArea();
+                                area.setText("未找到指定订单id"+String.valueOf(i));
+                                JOptionPane.showConfirmDialog(null,area,"ERROR!",JOptionPane.PLAIN_MESSAGE);
+                            }
+                            else{
+                                int old_num=Integer.valueOf(tmp.getString("num"));
+                                if(old_num-buy_num<0){
+                                    JTextArea area = new JTextArea();
+                                    area.setText(item_name+"商品库存数量不足！");
+                                    JOptionPane.showConfirmDialog(null, area, "ERROR!", JOptionPane.PLAIN_MESSAGE);
+                                }
+                                else if(old_num-buy_num>=0){
+                                    db.executeUpdate("'" + item_name +
+                                            "'", belongTo, "name",String.valueOf(old_num-buy_num) , "num");
+                                }
+                            }
+
+
+                        }
+                        if (table.getNext().equals("4")) {
+                            tmp.next();
+                            int old_num=Integer.valueOf(tmp.getString("num"));
+                            db.executeUpdate("'" + item_name +
+                                    "'", belongTo, "name",String.valueOf(old_num+buy_num) , "num");
+                        }
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
                 }
                 // table从读
                 Vector<Object> nametemp = new Vector<>();
@@ -276,6 +310,7 @@ public class init_box {
         horizontalBox_unchecked.add(button_unchecked_confirm);
         return horizontalBox_unchecked;
     }
+
 
 
     /**
@@ -453,12 +488,12 @@ public class init_box {
 
     /**
      * 初始化 库存转移 中的box
-     * todo
+     *
      * @param table 关联的table
      * @param db    关联的数据库
      * @return 初始化完成的box
      */
-    public Box stock_trans(MyJPanel table, DBBean db) {
+    public Box stock_trans(MyJPanel table, DBBean db, String[] repository) {
         Box horizontalBox_up = Box.createHorizontalBox();
         Box horizontalBox_down = Box.createHorizontalBox();
         Box verticalBox = Box.createVerticalBox();
@@ -467,11 +502,21 @@ public class init_box {
 
         JButton button_addGoods = new JButton("+ 新建货物");
         JButton button_confirm = new JButton("开始运输");
+        button_confirm.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                table.setData(new Vector<>());
+            }
+        });
+
 
         JLabel label_from = new JLabel("原仓库  ");
         horizontalBox_up.add(label_from);
 
-        JComboBox comboBox_from = new JComboBox();
+
+        String[] jcombobox_string_from= windowsForAddEmployeeAccount.jcombobox_string(db,
+                "repository_name","name");
+        JComboBox comboBox_from = new JComboBox(jcombobox_string_from);
         horizontalBox_up.add(comboBox_from);
 
         Component horizontalGlue = Box.createHorizontalGlue();
@@ -488,7 +533,9 @@ public class init_box {
         label_to.setHorizontalAlignment(SwingConstants.CENTER);
         horizontalBox_up.add(label_to);
 
-        JComboBox comboBox_to = new JComboBox();
+        String[] jcombobox_string_to= windowsForAddEmployeeAccount.jcombobox_string(db,
+                "repository_name","name");
+        JComboBox comboBox_to = new JComboBox(jcombobox_string_to);
         horizontalBox_up.add(comboBox_to);
 
         JButton button_savePath = new JButton("确  定");
@@ -496,7 +543,25 @@ public class init_box {
 
         horizontalBox_down.add(button_addGoods);
         horizontalBox_down.add(button_confirm);
+        button_savePath.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                repository[0]=String.valueOf(comboBox_from.getSelectedItem());
+                repository[1]=String.valueOf(comboBox_to.getSelectedItem());
+                System.out.println("---------------------"+repository[1]);
+            }
+        });
+        button_addGoods.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
+                windowsToCarriage winToCarriage = new windowsToCarriage(db,repository,table);
+                winToCarriage.setVisible(true);
+                winToCarriage.setSize(400,300);
+                winToCarriage.setLocationRelativeTo(null);
+                winToCarriage.setResizable(false);
+            }
+        });
         return verticalBox;
     }
 
@@ -600,7 +665,7 @@ public class init_box {
             ResultSet temp1 = db.executeFind(name, belongto, "name");
             float in = 0;
             try {
-                while( temp1.next() ) in = temp1.getFloat("inprie");
+                while( temp1.next() ) in = temp1.getFloat("inprice");
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
