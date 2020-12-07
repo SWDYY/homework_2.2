@@ -98,14 +98,13 @@ public class windowsToCarriage extends JFrame{
                 //以下true false代替表达式
                 Integer all_num=-1;
                 int num=0;
-                ResultSet tmp=db.executeFind(textField_carriage_itemNameDisplay.getText(),repository[0],"name");
+                ResultSet tmp=db.executeFind(textField_carriage_itemNameDisplay.getText(), repository[0],"name");
                     if(!tmp.next()){
                         JTextArea area = new JTextArea();
                         area.setText("未找到指定商品！");
                         JOptionPane.showConfirmDialog(null,area,"ERROR!",JOptionPane.PLAIN_MESSAGE);
                     }
                     else {
-
                         all_num = Integer.valueOf(String.valueOf(tmp.getObject("num")));
                         String outprice = tmp.getString("outprice");
                         String inprice = tmp.getString("inprice");
@@ -115,7 +114,7 @@ public class windowsToCarriage extends JFrame{
                         System.out.println("all_num" + all_num);
 
                         //商品库存数量不足
-                    if (all_num < num) {
+                        if (all_num < num) {
                             JTextArea area = new JTextArea();
                             area.setText("指定商品库存数量不足！");
                             JOptionPane.showConfirmDialog(null, area, "ERROR!", JOptionPane.PLAIN_MESSAGE);

@@ -7,6 +7,8 @@ import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
@@ -43,6 +45,7 @@ public class Shopkeeper extends JFrame {
 
     private DBBean db;
     private String belongto;
+    private MyJPanel[] alltable;
 
     private MyJPanel product; // 货品
     private MyJPanel customer;  // 客户
@@ -64,6 +67,9 @@ public class Shopkeeper extends JFrame {
         this.db=db;
         this.belongto = belongTo;
         init_box init = new init_box(resourceBundle);
+        alltable = new MyJPanel[]{order_all, order_uncheck, order_unpaid, order_finish, order_returning, order_returned,
+                stock_check, product, customer, account};
+
         myJPanel_productString = resourceBundle.getString("myJPanel_productString");//货品
         panel_customerStirng = resourceBundle.getString("panel_customerStirng");//客户
         panel_sellStirng = resourceBundle.getString("panel_sellStirng");//销售
@@ -95,20 +101,16 @@ public class Shopkeeper extends JFrame {
 
 
         /***货品Panel***/
-        Vector<Object> name_product = new Vector<>();
+        Vector<Object> name_product = new Vector<>(Arrays.asList("id", "name", "outprice", "outprice_wholesale"));
         // todo @sxz
-        name_product.add("ID"); name_product.add("Name");
-        name_product.add("outprice"); name_product.add("outprice_wholesale");
         product = new MyJPanel(name_product, 0,0);
         tabbedPane_all.add(product);
         tabbedPane_all.addTab(myJPanel_productString, product);
 
 
         /***客户Panel***/
-        Vector<Object> name_customer = new Vector<>();
+        Vector<Object> name_customer = new Vector<>(Arrays.asList("id", "name", "phonenum", "classification"));
         // todo @sxz
-        name_customer.add("ID"); name_customer.add("name");
-        name_customer.add("phonenumber"); name_customer.add("classification");
         customer = new MyJPanel(name_customer, 0,0);
         tabbedPane_all.add(customer);
         tabbedPane_all.add(panel_customerStirng, customer);
@@ -123,16 +125,12 @@ public class Shopkeeper extends JFrame {
         tabbedPane_sell = new JTabbedPane();
         panel_sell.add(tabbedPane_sell);
         // todo @sxz
-        Vector<Object> name_nochange = new Vector<>();
-        name_nochange.add("ID"); name_nochange.add("Name"); name_nochange.add("price_all"); name_nochange.add("State");
-        Vector<Object> name_havechange = new Vector<>();
-        name_havechange.add("ID"); name_havechange.add("Name"); name_havechange.add("price_all"); name_havechange.add("State"); name_havechange.add("StateChange");
+        Vector<Object> name_nochange = new Vector<>(Arrays.asList("id", "name", "price_all", "state"));
+        Vector<Object> name_havechange = new Vector<>(Arrays.asList("id", "name", "price_all", "state", "stateChange"));
 
         /***开销售单secondPanel***/
-        Vector<Object> name_order_new = new Vector<>();
+        Vector<Object> name_order_new = new Vector<>(Arrays.asList("product_name", "outprice", "num", "label_restore_totalBuyingPriceTitle"));
         // todo @sxz
-        name_order_new.add("物品名"); name_order_new.add("单价");
-        name_order_new.add("数量"); name_order_new.add("总价");
         order_new = new MyJPanel(name_order_new, 0,1);
         // todo 注释，店长店员用一个
         tabbedPane_sell.add(order_new);
@@ -177,32 +175,23 @@ public class Shopkeeper extends JFrame {
         panel_stock.add(tabbedPane_stock);
 
         /***进货secondPanel***/
-        Vector<Object> name_stock_in = new Vector<>();
+        Vector<Object> name_stock_in = new Vector<>(Arrays.asList("product_name", "num", "inprice", "outprice", "outprice_wholesale"));
         // todo @sxz
-        name_stock_in.add("物品名"); name_stock_in.add("数量");
-        name_stock_in.add("进价"); name_stock_in.add("售价");
-        name_stock_in.add("售价（批发）");
         stock_in = new MyJPanel(name_stock_in, 0,0);
         tabbedPane_stock.add(stock_in);
         tabbedPane_stock.addTab(inStockStirng, stock_in);
 
         /***清点库存secondPanel***/
-        Vector<Object> name_stock_check = new Vector<>();
+        Vector<Object> name_stock_check = new Vector<>(Arrays.asList("id", "name", "num", "outprice", "outprice_wholesale", "inprice"));
         // todo @sxz
-        name_stock_check.add("id"); name_stock_check.add("name");
-        name_stock_check.add("num"); name_stock_check.add("outprice");
-        name_stock_check.add("outprice_wholesale"); name_stock_check.add("inprice");
         stock_check = new MyJPanel(name_stock_check, 0,0);
         tabbedPane_stock.add(stock_check);
         tabbedPane_stock.addTab(check_stockString, stock_check);
 
 
         /***账户Panel***/
-        Vector<Object> name_account = new Vector<>();
+        Vector<Object> name_account = new Vector<>(Arrays.asList("id", "user_name", "user_password", "phonenum", "authority", "belongto"));
         // todo @sxz
-        name_account.add("id"); name_account.add("user_name");
-        name_account.add("user_password"); name_account.add("phonenum");
-        name_account.add("authority"); name_account.add("belongto");
         account = new MyJPanel(name_account, 0,0);
         tabbedPane_all.add(account);
         tabbedPane_all.addTab(AccountSring, account);
@@ -225,10 +214,10 @@ public class Shopkeeper extends JFrame {
         order_unpaid.setDown(init.order_check_but(order_unpaid, db, related, belongto));
         order_finish.setDown(init.order_check_but(order_finish, db, related, belongto));
         order_returning.setDown(init.order_check_but(order_returning, db, related, belongto));
-        order_all.setUp(init.order_check(order_all, db, related, belongTo));
-        temp = init.stock_in(stock_in, db, stock_check, belongto);
+        order_all.setUp(init.order_check(order_all, db, related, new String[]{belongto}));
+        temp = init.stock_in(stock_in, db, new MyJPanel[]{product, stock_check}, belongto);
         stock_in.setUp(temp[0]); stock_in.setDown(temp[1]);
-        stock_check.setUp(init.stock_check(stock_check, db, belongto));
+        stock_check.setUp(init.stock_check(stock_check, db, new String[]{belongto}));
 
         order_uncheck.setClickable(true, resourceBundle, db, belongto);
         order_unpaid.setClickable(true, resourceBundle, db, belongto);
@@ -238,16 +227,18 @@ public class Shopkeeper extends JFrame {
 
 
         // 读数据
-        product.setData(returnVector.FromDBReadAll(db, belongTo, name_product));
-        customer.setData(returnVector.FromDBReadAll(db, "customermanager", name_customer));
+        product.setData(returnVector.FromDBReadAll(db, belongTo, name_product), resourceBundle);
+        customer.setData(returnVector.FromDBReadAll(db, "customermanager", name_customer), resourceBundle);
+        order_new.setData(new Vector<>(), resourceBundle);
         for (int i = 1; i < 6; i++){
-            related[i].setData(returnVector.FromDBRead(db, belongTo+"_order", name_nochange, op.op.StateConvert(related[i].getNow()), "State"));
+            related[i].setData(returnVector.FromDBRead(db, belongTo+"_order", name_nochange, op.op.StateConvert(related[i].getNow()), "state"), resourceBundle);
         }
-        order_all.setData(returnVector.FromDBReadAll(db, belongTo+"_order", name_nochange));
-        stock_check.setData(returnVector.FromDBReadAll(db, belongTo, name_stock_check));
+        order_all.setData(returnVector.FromDBReadAll(db, belongTo+"_order", name_nochange), resourceBundle);
+        stock_in.setData(new Vector<>(), resourceBundle);
+        stock_check.setData(returnVector.FromDBReadAll(db, belongTo, name_stock_check), resourceBundle);
         Vector<Object> nametemp = new Vector<>();
         nametemp.add("user_name");
-        account.setData(returnVector.FromDBRead(db, "login", account.getTableName(), belongTo, "belongto"));
+        account.setData(returnVector.FromDBRead(db, "login", account.getTableName(), belongTo, "belongto"), resourceBundle);
     }
 
     public String getBelongto() { return this.belongto; }

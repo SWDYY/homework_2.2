@@ -7,6 +7,7 @@ import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
@@ -26,6 +27,7 @@ public class Employee extends JFrame {
     private String belongto = null;  // 属于哪个店
     private DBBean db;  // 关联的数据库
     private init_box init = null;
+    private MyJPanel alltable[];
 
     private JTabbedPane tabbedPane_all;
     private JTabbedPane tabbedPane_sell;
@@ -45,6 +47,8 @@ public class Employee extends JFrame {
         init = new init_box(resourceBundle);
         belongto = belongTo;
         this.db =db;
+        alltable = new MyJPanel[]{order_all, null, null, null, null, null,
+                null, product, customer, null};
 
         myJPanel_productString = resourceBundle.getString("myJPanel_productString");//货品
         panel_customerStirng = resourceBundle.getString("panel_customerStirng");//客户
@@ -68,20 +72,13 @@ public class Employee extends JFrame {
         show.add(totalPanel);
 
         /***货品Panel***/
-        Vector<Object> name_product = new Vector<>();
-        // todo @sxz
-        name_product.add("ID"); name_product.add("Name");
-        name_product.add("outprice");
+        Vector<Object> name_product = new Vector<>(Arrays.asList("id", "name", "outprice"));
         product = new MyJPanel(name_product, 0, 0);
         tabbedPane_all.add(product);
         tabbedPane_all.addTab(myJPanel_productString, product);
 
         /***客户Panel***/
-        Vector<Object> name_customer = new Vector<>();
-        // todo @sxz
-        // todo returnVector.getname 不能调这个函数，因为这个调了之后字典里面加不上，也就是做不了多语言
-        name_customer.add("ID"); name_customer.add("name");
-        name_customer.add("phonenumber"); name_customer.add("classification");
+        Vector<Object> name_customer = new Vector<>(Arrays.asList("id", "name", "phonenum", "classification"));
         customer = new MyJPanel(name_customer, 0, 0);
         tabbedPane_all.add(customer);
         tabbedPane_all.add(panel_customerStirng, customer);
@@ -96,10 +93,9 @@ public class Employee extends JFrame {
         panel_sell.add(tabbedPane_sell);
 
         /***开销售单***/
-        Vector<Object> name_order_new = new Vector<>();
-        // todo @sxz
-        name_order_new.add("物品名"); name_order_new.add("单价");
-        name_order_new.add("数量"); name_order_new.add("总价");
+        Vector<Object> name_order_new = new Vector<>(Arrays.asList("product_name", "outprice", "num", "label_restore_totalBuyingPriceTitle"));
+        name_order_new.add("product_name"); name_order_new.add("outprice");
+        name_order_new.add("num"); name_order_new.add("label_restore_totalBuyingPriceTitle");
         order_new = new MyJPanel(name_order_new, 0, 3);
         tabbedPane_sell.add(order_new);
         tabbedPane_sell.addTab(panel_addingOrderStirng, order_new);
@@ -107,15 +103,13 @@ public class Employee extends JFrame {
         /***未收款（零售）***/
         Vector<Object> name_order_unpaid = new Vector<>();
         // todo
-        name_order_unpaid.add("这里展示付款二维码+付款完成的按钮");
+//        name_order_unpaid.add("这里展示付款二维码+付款完成的按钮");
         order_unpaid = new MyJPanel(name_order_unpaid, 0,0);
         tabbedPane_sell.add(order_unpaid);
         tabbedPane_sell.addTab(panel_cashieringString, order_unpaid);
 
         /***查看订单列表secondPanel***/
-        Vector<Object> name_order = new Vector<>();
-        name_order.add("ID"); name_order.add("Name");
-        name_order.add("price_all");
+        Vector<Object> name_order = new Vector<>(Arrays.asList("id", "name", "price_all"));
         order_all = new MyJPanel(name_order, 0,0);
         tabbedPane_sell.addTab(panel_orderListSring, order_all);
 
@@ -129,13 +123,14 @@ public class Employee extends JFrame {
         Box[] temp = init.order_new(order_new, db, new MyJPanel[]{order_all}, belongto);
         order_new.setUp(temp[0]);
         order_new.setDown(temp[1]);
-        order_all.setUp(init.order_check(order_all, db, new MyJPanel[]{order_all}, belongto));
+        order_all.setUp(init.order_check(order_all, db, new MyJPanel[]{order_all}, new String[]{belongto}));
         order_all.setClickable(true, resourceBundle, db, belongto);
 
         // 设置数据
-        product.setData(returnVector.FromDBReadAll(db, belongTo, name_product));
-        customer.setData(returnVector.FromDBReadAll(db, "customermanager", name_customer));
-        order_all.setData(returnVector.FromDBReadAll(db, belongTo+"_order", name_order));
+        product.setData(returnVector.FromDBReadAll(db, belongTo, name_product), resourceBundle);
+        customer.setData(returnVector.FromDBReadAll(db, "customermanager", name_customer), resourceBundle);
+        order_new.setData(new Vector<>(), resourceBundle);
+        order_all.setData(returnVector.FromDBReadAll(db, belongTo+"_order", name_order), resourceBundle);
 
     }
 

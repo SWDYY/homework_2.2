@@ -59,10 +59,10 @@ public class DBBean {
         String sql = null;
         if(type.equals("order")){
             sql = "create table " + tableName +
-                    "(ID int NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
-                    "Name varchar(100) NOT NULL UNIQUE KEY" +
-                    ",State int NOT NULL" +
-                    ",Items varchar(100) NOT NULL"+
+                    "(id int NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
+                    "name varchar(100) NOT NULL UNIQUE KEY" +
+                    ",state varchar(100) NOT NULL" +
+                    ",orders varchar(100) NOT NULL"+
                     ",price_all float,num int NOT NULL" +
                     ",profit float NOT NULL)";
         }else if(type.equals("repository")) {
@@ -76,9 +76,8 @@ public class DBBean {
         }
         else if(type.equals("item_order")){
             sql = "create table " + tableName +
-                    "(repository  varchar(100) NOT NULL, " +
-                    "order_id int NOT NULL" +
-                    ",item_name varchar(100) NOT NULL" +
+                    "(order_id int NOT NULL" +
+                    ",product_name varchar(100) NOT NULL" +
                     ",num int NOT NULL)";
         }
         System.out.println("--创建新的表:"+sql+"\n");

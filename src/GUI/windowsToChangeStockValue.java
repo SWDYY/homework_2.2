@@ -43,8 +43,8 @@ public class windowsToChangeStockValue extends JFrame {
         productIDString = resourceBundle.getString("productIDString");// 货物ID
         product_nameString = resourceBundle.getString("product_nameString");// 货品名称
         productNumString = resourceBundle.getString("productNumString");//// 货物数量
-        productInpriceString = resourceBundle.getString("productInpriceString");//// 商品进价
-        productOutpriceString = resourceBundle.getString("productOutpriceString");//// 商品售价
+        productInpriceString = resourceBundle.getString("inprice");//// 商品进价
+        productOutpriceString = resourceBundle.getString("outprice");//// 商品售价
         button_account_changeString = resourceBundle.getString("button_account_changeString");// 修改
         cancel = resourceBundle.getString("cancel");// 取   消
 
@@ -113,7 +113,7 @@ public class windowsToChangeStockValue extends JFrame {
                 textField_changeGoodsValue_goodsIDDisplay.setText(findres.getString("id"));
                 textField_changeGoodsValue_goodNameDisplay.setText(name);
                 textField_changeGoodsValue_goodsNumberDisplay.setText(findres.getString("num"));
-                textField_changeGoodsValue_goodsInpriceDisplay.setText(findres.getString("inprie"));
+                textField_changeGoodsValue_goodsInpriceDisplay.setText(findres.getString("inprice"));
                 textField_changeGoodsValue_goodsOutpriceDisplay.setText(findres.getString("outprice"));
                 textField_changeGoodsValue_goodsWholeDisplay.setText(findres.getString("outprice_wholesale"));
             }
@@ -128,12 +128,12 @@ public class windowsToChangeStockValue extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // 改数据库
                 db.executeUpdate(textField_changeGoodsValue_goodsIDDisplay.getText(),belongto,"id",textField_changeGoodsValue_goodsNumberDisplay.getText(),"num");
-                db.executeUpdate(textField_changeGoodsValue_goodsIDDisplay.getText(),belongto,"id",textField_changeGoodsValue_goodsInpriceDisplay.getText(),"inprie");
+                db.executeUpdate(textField_changeGoodsValue_goodsIDDisplay.getText(),belongto,"id",textField_changeGoodsValue_goodsInpriceDisplay.getText(),"inprice");
                 db.executeUpdate(textField_changeGoodsValue_goodsIDDisplay.getText(),belongto,"id",textField_changeGoodsValue_goodsOutpriceDisplay.getText(),"outprice");
                 db.executeUpdate(textField_changeGoodsValue_goodsIDDisplay.getText(),belongto,"id",textField_changeGoodsValue_goodsWholeDisplay.getText(),"outprice_wholesale");
 
                 //table刷新
-                table.setData(returnVector.FromDBReadAll(db, belongto, table.getTableName()));
+                table.setData(returnVector.FromDBReadAll(db, belongto, table.getTableName()), resourceBundle);
                 dispose();
             }
 

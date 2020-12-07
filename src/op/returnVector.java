@@ -1,5 +1,6 @@
 package op;
 import java.sql.*;
+import java.util.ResourceBundle;
 import java.util.Vector;
 import Bean.DBBean;
 
@@ -97,5 +98,21 @@ public class returnVector {
             }
         }
         return v1;
+    }
+
+    /**
+     * 将表头名字转换为不同的语言版本
+     * @param name    想要转换的表头名字
+     * @param resourceBundle      想要 转换的语言
+     * @return   返回一个转换完语言的表头
+     * eg:result=returnVector.convertHeadNameForDifferentLanguage(new Vector<>(Arrays.asList("id","name","num"))
+     * ,language_convert.language_convertEnglish());
+     */
+    public static Vector<Object> convertHeadNameForDifferentLanguage(Vector<Object> name, ResourceBundle resourceBundle){
+        Vector<Object> result=new Vector<>();
+        for(int i=0;i<name.size();i++){
+            result.add(resourceBundle.getString(String.valueOf(name.get(i))));
+        }
+        return result;
     }
 }

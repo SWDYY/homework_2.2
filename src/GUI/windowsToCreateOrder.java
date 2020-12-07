@@ -40,9 +40,9 @@ public class windowsToCreateOrder extends JFrame {
 
     public windowsToCreateOrder(ResourceBundle resourceBundle,DBBean db, MyJPanel table, String belongto, JTextField total) {
         newOrderProductString = resourceBundle.getString("newOrderProductString");//新增商品
-        Order_product_nameString = resourceBundle.getString("Order_product_nameString");// 商品名称
+        Order_product_nameString = resourceBundle.getString("product_name");// 商品名称
         button_account_searchString = resourceBundle.getString("button_account_searchString");// 查询
-        productOutpriceString = resourceBundle.getString("productOutpriceString");// 商品售价
+        productOutpriceString = resourceBundle.getString("outprice");// 商品售价
         Order_productNumString = resourceBundle.getString("Order_productNumString");////商品数量
         confirmString = resourceBundle.getString("confirmString");// 确认
         label_restore_totalBuyingPriceTitle = resourceBundle.getString("label_restore_totalBuyingPriceTitle");// 合计
@@ -194,12 +194,26 @@ public class windowsToCreateOrder extends JFrame {
         button_addOrders_confirm.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Vector<Object> temp = new Vector<>();
-                temp.add(textField.getText()); temp.add(goodsPriceDisplay.getText());
-                temp.add(textField_1.getText()); temp.add(totalMoneyDisplay.getText());
-                table.getModel().addRow(temp);
-                total.setText( String.valueOf(Float.parseFloat(total.getText()) + Float.parseFloat(totalMoneyDisplay.getText())) );
-                dispose();
+                ResultSet res = db.executeFind(textField.getText(), belongto, "name");
+                try {
+                    res.next();
+                    if (Integer.parseInt(res.getString("num")) >= Integer.parseInt(textField_1.getText()) ){
+                        Vector<Object> temp = new Vector<>();
+                        temp.add(textField.getText()); temp.add(goodsPriceDisplay.getText());
+                        temp.add(textField_1.getText()); temp.add(totalMoneyDisplay.getText());
+                        table.getModel().addRow(temp);
+                        total.setText( String.valueOf(Float.parseFloat(total.getText()) + Float.parseFloat(totalMoneyDisplay.getText())) );
+                        dispose();
+                    }
+                    else {
+                        JTextArea aboutarea = new JTextArea();
+                        aboutarea.setText("库存不够！\n");
+                        JOptionPane.showConfirmDialog(null,aboutarea,"Error!",JOptionPane.PLAIN_MESSAGE);
+                        dispose();
+                    }
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
             }
         });
         horizontalBox_2.add(button_addOrders_confirm);

@@ -70,7 +70,7 @@ public class menubar extends JMenuBar {
                     win = new Manager(language_convert.language_convertChinese(), db);
                     win.setBounds(450, 150, 1500, 1000);
                 }else if(jFrame.getClass().equals(new Shopkeeper(resourceBundle, db, "repository1").getClass())){
-                    win=new Shopkeeper(language_convert.language_convertChinese(), db, ((Employee)jFrame).getBelongto());
+                    win=new Shopkeeper(language_convert.language_convertChinese(), db, ((Shopkeeper)jFrame).getBelongto());
                     win.setBounds(450, 150, 1500, 1000);
                 }else if(jFrame.getClass().equals(new windowsToLogin(resourceBundle, db).getClass())){
                     win=new windowsToLogin(language_convert.language_convertChinese(), db);
@@ -95,7 +95,7 @@ public class menubar extends JMenuBar {
                     win=new Manager(language_convert.language_convertEnglish(), db);
                     win.setBounds(450, 150, 1500, 1000);
                 }else if(jFrame.getClass().equals(new Shopkeeper(resourceBundle, db, "repository1").getClass())){
-                    win=new Shopkeeper(language_convert.language_convertEnglish(), db, ((Employee)jFrame).getBelongto());
+                    win=new Shopkeeper(language_convert.language_convertEnglish(), db, ((Shopkeeper)jFrame).getBelongto());
                     win.setBounds(450, 150, 1500, 1000);
                 }else if(jFrame.getClass().equals(new windowsToLogin(resourceBundle, db).getClass())){
                     win=new windowsToLogin(language_convert.language_convertEnglish(), db);
@@ -119,7 +119,7 @@ public class menubar extends JMenuBar {
                     win=new Manager(language_convert.language_convertDeutsch(), db);
                     win.setBounds(450, 150, 1500, 1000);
                 }else if(jFrame.getClass().equals(new Shopkeeper(resourceBundle, db, "repository1"))){
-                    win=new Shopkeeper(language_convert.language_convertDeutsch(), db, ((Employee)jFrame).getBelongto());
+                    win=new Shopkeeper(language_convert.language_convertDeutsch(), db, ((Shopkeeper)jFrame).getBelongto());
                     win.setBounds(450, 150, 1500, 1000);
                 }else if(jFrame.getClass().equals(new windowsToLogin(resourceBundle, db).getClass())){
                     win=new windowsToLogin(language_convert.language_convertDeutsch(), db);

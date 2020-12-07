@@ -35,8 +35,8 @@ public class windowsToChangeCustomerInfo extends JFrame {
     public windowsToChangeCustomerInfo(ResourceBundle resourceBundle,DBBean db) {
         //public windowsToCreateCustomer(DBBean db, JTable table) {
         label_account_searchTitleString = resourceBundle.getString("label_account_searchTitleString");//客户姓名
-        phoneString = resourceBundle.getString("phoneString");// 联系方式
-        customer_class_String = resourceBundle.getString("customer_class_String");// 客户类型
+        phoneString = resourceBundle.getString("phonenum");// 联系方式
+        customer_class_String = resourceBundle.getString("classification");// 客户类型
         retailString = resourceBundle.getString("retailString");// 零  售
         wholesaleString = resourceBundle.getString("wholesaleString");// 批  发
         saveString = resourceBundle.getString("saveString");//保  存

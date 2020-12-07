@@ -29,7 +29,7 @@ public class windowsToChangePassword extends JFrame {
     public windowsToChangePassword(ResourceBundle resourceBundle,DBBean db) {
         FindPasswordString = resourceBundle.getString("FindPasswordString"); // 找回密码
         user_name = resourceBundle.getString("user_name");//用户名
-        phoneString = resourceBundle.getString("phoneString");// 联系方式
+        phoneString = resourceBundle.getString("phonenum");// 联系方式
         newPasswordString = resourceBundle.getString("newPasswordString");// 新密码
         confirmString = resourceBundle.getString("confirmString");// 确认
         cancel = resourceBundle.getString("cancel");// 取   消

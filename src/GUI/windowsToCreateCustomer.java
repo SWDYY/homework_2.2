@@ -50,8 +50,8 @@ public class windowsToCreateCustomer extends JFrame {
 
     public windowsToCreateCustomer(ResourceBundle resourceBundle,DBBean db, MyJPanel table) {
         label_account_searchTitleString = resourceBundle.getString("label_account_searchTitleString");//客户姓名
-        phoneString = resourceBundle.getString("phoneString");// 联系方式
-        customer_class_String = resourceBundle.getString("customer_class_String");// 客户类型
+        phoneString = resourceBundle.getString("phonenum");// 联系方式
+        customer_class_String = resourceBundle.getString("classification");// 客户类型
         retailString = resourceBundle.getString("retailString");// 零  售
         wholesale = resourceBundle.getString("wholesale");// 批  发
         saveString = resourceBundle.getString("saveString");// 保   存
@@ -161,7 +161,7 @@ public class windowsToCreateCustomer extends JFrame {
                     db.executeQuery("customermanager(name,phonenumber,classification)","'"+textField_createCustomer_nameDisplay.getText()
                             +"','"+textField_createCustomer_phoneNumberDisplay.getText()+"','wholesaler'");
                 // table更新显示
-                table.setData(returnVector.FromDBReadAll(db, "customermanager", table.getTableName()));
+                table.setData(returnVector.FromDBReadAll(db, "customermanager", table.getTableName()), resourceBundle);
                 //检索是否填写了客户类型，没填->弹窗提醒
                 dispose();
             }

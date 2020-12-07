@@ -28,7 +28,8 @@ public class windowsToCreateItemForManager extends JFrame {
     private String product_nameString;// 货物名称
     private String productNumString;// 货物数量
     private String productInpriceString;// 商品进价
-    private String productOutpriceString;// 商品售价
+    private String productOutpriceString;// 零售价
+    private String productWholesaleString; // 批发价
     private String targetStockString;// 目的仓库
     private String confirmString;// 确认
     private String cancel;// 取消
@@ -43,11 +44,14 @@ public class windowsToCreateItemForManager extends JFrame {
         add_newItemString = resourceBundle.getString("add_newItemString");// 新增入库商品
         product_nameString = resourceBundle.getString("product_nameString");// 货物名称
         productNumString = resourceBundle.getString("productNumString");// 货物数量
-        productInpriceString = resourceBundle.getString("productInpriceString");// 商品进价
-        productOutpriceString = resourceBundle.getString("productOutpriceString");// 商品售价
+        productInpriceString = resourceBundle.getString("inprice");// 商品进价
+        productOutpriceString = resourceBundle.getString("outprice");//  零售价
+        productWholesaleString = resourceBundle.getString("outprice_wholesale"); //批发价
         targetStockString = resourceBundle.getString("targetStockString");// 目的仓库
         confirmString = resourceBundle.getString("confirmString");// 确认
         cancel = resourceBundle.getString("cancel");// 取消
+
+
         //public windowsToCreateItemForManager(JTable table, Vector<Vector<Object>> data, Vector<Object> name, JTextField out) {
         setTitle(add_newItemString);
 
@@ -145,7 +149,7 @@ public class windowsToCreateItemForManager extends JFrame {
         textField_addItem_outpriceDisplay.setColumns(10);
 
         // 商品售价（零售）的label
-        JLabel label_addItem_retailOutPrice = new JLabel("商品售价（零售）");
+        JLabel label_addItem_retailOutPrice = new JLabel(productWholesaleString);
         label_addItem_retailOutPrice.setFont(new Font("微软雅黑", Font.BOLD, 15));
         label_addItem_retailOutPrice.setHorizontalAlignment(SwingConstants.RIGHT);
         GridBagConstraints gbc_label_addItem_retailOutPrice = new GridBagConstraints();

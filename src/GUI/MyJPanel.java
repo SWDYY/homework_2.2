@@ -113,9 +113,9 @@ public class MyJPanel extends JPanel{
      * 设置table的数据，并重新展示关联
      * @param data 更新的数据
      */
-    public void setData(Vector<Vector<Object>> data) {
+    public void setData(Vector<Vector<Object>> data, ResourceBundle resourceBundle) {
         // 更新表格中的信息
-        if (now == 0 || next == 0) this.model = new DefaultTableModel_noEditable(data, this.name, 99);
+        if (now == 0 || next == 0) this.model = new DefaultTableModel_noEditable(data, op.returnVector.convertHeadNameForDifferentLanguage(this.name, resourceBundle), 99);
         else {
             this.model =new DefaultTableModel_noEditable(data, name, 4);
             this.table.setModel(this.model);
@@ -152,7 +152,7 @@ public class MyJPanel extends JPanel{
                         int id = Integer.parseInt( (String)((Vector<Object>)temp).get(0) );
                         windowsToShowOrderItem win = new windowsToShowOrderItem(resourceBundle, db, id, belongto);
                         win.setVisible(true);
-                        win.setSize(1000, 1000);
+                        win.setSize(600, 600);
                         win.setLocationRelativeTo(null);
                         win.setResizable(false);
                     }

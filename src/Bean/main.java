@@ -24,6 +24,8 @@ public class main {
         //ResultSet resultSet=dbBean.executeQuery("wkr","nameandpassword","user_name");
 //        String password="1234567";
         dbBean.executeCreateNewTable("repository1","repository");
+        dbBean.executeCreateNewTable("repository1_order","order");
+        dbBean.executeCreateNewTable("repository1_item_order","item_order");
 //        dbBean.executeDeleteTable("item1");
         ResultSet resultSet=null;
 //        Vector<Vector<Object>> res = new Vector<Vector<Object>>();returnVector.FromDBRead(dbBean,"itemmanager","sxz","name");
