@@ -46,11 +46,10 @@ public class Manager extends JFrame {
 
     public Manager(ResourceBundle resourceBundle,DBBean db){
         this.db=db;
-        this.init = new init_box(resourceBundle);
+        this.init = new init_box(resourceBundle, db);
         alltable = new MyJPanel[]{order, null, null, null, null, null,
                 stock_check, product, customer, account};
 
-        this.setBounds(450, 150, 1000, 600);
         myJPanel_productString = resourceBundle.getString("myJPanel_productString");//货品
         panel_customerStirng = resourceBundle.getString("panel_customerStirng");//客户
         stock_String = resourceBundle.getString("stock_String");//库存
@@ -128,7 +127,7 @@ public class Manager extends JFrame {
 
 
         /***账户Panel***/
-        Vector<Object> name_account = new Vector<>(Arrays.asList("id", "user_name", "user_password", "phonenum", "authority", "belongto"));
+        Vector<Object> name_account = new Vector<>(Arrays.asList("user_name", "phonenum", "authority", "belongto"));
         account = new MyJPanel(name_account, 0,0);
         tabbedPane_all.add(account);
         tabbedPane_all.addTab(AccountSring, account);
@@ -161,6 +160,7 @@ public class Manager extends JFrame {
         stock_trans.setData(new Vector<>(), resourceBundle);
         account.setData(returnVector.FromDBReadAll(db, "login", account.getTableName()), resourceBundle);
 
+        addKeyListener(new MyListener(belongto, alltable, db, init));
     }
 
     public String getBelongto() { return "res"; }

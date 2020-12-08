@@ -154,11 +154,11 @@ public class windowsToCreateCustomer extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 //更新数据库
                 if(radioButton_createCustomer_retail.isSelected()){
-                    db.executeQuery("customermanager(name,phonenumber,classification)","'"+textField_createCustomer_nameDisplay.getText()
+                    db.executeQuery("customermanager(name,phonenum,classification)","'"+textField_createCustomer_nameDisplay.getText()
                             +"','"+textField_createCustomer_phoneNumberDisplay.getText()+"','retail'");
                 }
                 else
-                    db.executeQuery("customermanager(name,phonenumber,classification)","'"+textField_createCustomer_nameDisplay.getText()
+                    db.executeQuery("customermanager(name,phonenum,classification)","'"+textField_createCustomer_nameDisplay.getText()
                             +"','"+textField_createCustomer_phoneNumberDisplay.getText()+"','wholesaler'");
                 // table更新显示
                 table.setData(returnVector.FromDBReadAll(db, "customermanager", table.getTableName()), resourceBundle);

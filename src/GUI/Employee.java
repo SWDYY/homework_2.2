@@ -7,6 +7,9 @@ import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.AWTEventListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.Vector;
@@ -44,11 +47,9 @@ public class Employee extends JFrame {
 
     public Employee(ResourceBundle resourceBundle, DBBean db, String belongTo){
 
-        init = new init_box(resourceBundle);
+        init = new init_box(resourceBundle, db);
         belongto = belongTo;
         this.db =db;
-        alltable = new MyJPanel[]{order_all, null, null, null, null, null,
-                null, product, customer, null};
 
         myJPanel_productString = resourceBundle.getString("myJPanel_productString");//货品
         panel_customerStirng = resourceBundle.getString("panel_customerStirng");//客户
@@ -131,6 +132,20 @@ public class Employee extends JFrame {
         customer.setData(returnVector.FromDBReadAll(db, "customermanager", name_customer), resourceBundle);
         order_new.setData(new Vector<>(), resourceBundle);
         order_all.setData(returnVector.FromDBReadAll(db, belongTo+"_order", name_order), resourceBundle);
+
+        alltable = new MyJPanel[]{order_all, null, null, null, null, null,
+                null, product, customer, null};
+
+
+
+        //todo@yyq
+        Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
+            public void eventDispatched(AWTEvent event) {
+                if (((KeyEvent) event).getID() == 113) {
+                    System.out.println("123");
+                }
+            }
+        }, AWTEvent.KEY_EVENT_MASK);
 
     }
 

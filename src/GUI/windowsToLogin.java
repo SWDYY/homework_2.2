@@ -123,19 +123,22 @@ public class windowsToLogin extends JFrame {
                 if (textField_login_username.getText().equals("1")) {
                     Employee employee = new Employee(resourceBundle, db, "repository1");
                     employee.setVisible(true);
-                    employee.setBounds(450, 150, 1500, 1000);
+                    employee.setSize(1000,600);
+                    employee.setLocationRelativeTo(null);
                     employee.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
                     show.dispose();
                 } else if (textField_login_username.getText().equals("2")) {
                     Shopkeeper shopkeeper = new Shopkeeper(resourceBundle, db, "repository1");
                     shopkeeper.setVisible(true);
-                    shopkeeper.setBounds(450, 150, 1500, 1000);
+                    shopkeeper.setSize(1000,600);
+                    shopkeeper.setLocationRelativeTo(null);
                     shopkeeper.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
                     show.dispose();
                 } else if (textField_login_username.getText().equals("3")) {
                     Manager manager = new Manager(resourceBundle, db);
                     manager.setVisible(true);
-                    manager.setBounds(450, 150, 1500, 1000);
+                    manager.setSize(1000,600);
+                    manager.setLocationRelativeTo(null);
                     manager.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
                     show.dispose();
                 } else {
@@ -173,7 +176,8 @@ public class windowsToLogin extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 windowsToChangePassword winToChangePassword = new windowsToChangePassword(resourceBundle, db);
                 winToChangePassword.setVisible(true);
-                winToChangePassword.setBounds(420, 180, 400, 300);
+                winToChangePassword.setSize(500,400);
+                winToChangePassword.setLocationRelativeTo(null);
             }
         });
         this.setBounds(400, 250, 400, 300);

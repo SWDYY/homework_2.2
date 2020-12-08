@@ -66,7 +66,7 @@ public class Shopkeeper extends JFrame {
     public Shopkeeper(ResourceBundle resourceBundle ,DBBean db, String belongTo){
         this.db=db;
         this.belongto = belongTo;
-        init_box init = new init_box(resourceBundle);
+        init_box init = new init_box(resourceBundle, db);
         alltable = new MyJPanel[]{order_all, order_uncheck, order_unpaid, order_finish, order_returning, order_returned,
                 stock_check, product, customer, account};
 
@@ -175,7 +175,7 @@ public class Shopkeeper extends JFrame {
         panel_stock.add(tabbedPane_stock);
 
         /***进货secondPanel***/
-        Vector<Object> name_stock_in = new Vector<>(Arrays.asList("product_name", "num", "inprice", "outprice", "outprice_wholesale"));
+        Vector<Object> name_stock_in = new Vector<>(Arrays.asList("product_name", "num"));
         // todo @sxz
         stock_in = new MyJPanel(name_stock_in, 0,0);
         tabbedPane_stock.add(stock_in);
@@ -190,7 +190,7 @@ public class Shopkeeper extends JFrame {
 
 
         /***账户Panel***/
-        Vector<Object> name_account = new Vector<>(Arrays.asList("id", "user_name", "user_password", "phonenum", "authority", "belongto"));
+        Vector<Object> name_account = new Vector<>(Arrays.asList("user_name", "phonenum", "authority", "belongto"));
         // todo @sxz
         account = new MyJPanel(name_account, 0,0);
         tabbedPane_all.add(account);
@@ -216,9 +216,8 @@ public class Shopkeeper extends JFrame {
         order_returning.setDown(init.order_check_but(order_returning, db, related, belongto));
         order_all.setUp(init.order_check(order_all, db, related, new String[]{belongto}));
         temp = init.stock_in(stock_in, db, new MyJPanel[]{product, stock_check}, belongto);
-        stock_in.setUp(temp[0]); stock_in.setDown(temp[1]);
+        stock_in.setUp(temp[0]);
         stock_check.setUp(init.stock_check(stock_check, db, new String[]{belongto}));
-
         order_uncheck.setClickable(true, resourceBundle, db, belongto);
         order_unpaid.setClickable(true, resourceBundle, db, belongto);
         order_finish.setClickable(true, resourceBundle, db, belongto);
@@ -239,6 +238,8 @@ public class Shopkeeper extends JFrame {
         Vector<Object> nametemp = new Vector<>();
         nametemp.add("user_name");
         account.setData(returnVector.FromDBRead(db, "login", account.getTableName(), belongTo, "belongto"), resourceBundle);
+
+        addKeyListener(new MyListener(belongto, alltable, db, init));
     }
 
     public String getBelongto() { return this.belongto; }

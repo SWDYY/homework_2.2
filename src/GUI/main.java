@@ -26,8 +26,9 @@ public class main {
         windowsToLogin winToLogin = new windowsToLogin(language_convert.language_convertChinese(), db);
         winToLogin.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         winToLogin.setVisible(true);
-        winToLogin.setBounds(400,150,400,300);
-        //winToLogin.setResizable(false);
+        winToLogin.setSize(500,400);
+        winToLogin.setLocationRelativeTo(null);
+        winToLogin.setResizable(false);
         winToLogin.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 

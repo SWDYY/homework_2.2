@@ -119,7 +119,6 @@ public class windowsToCarriage extends JFrame{
                             area.setText("指定商品库存数量不足！");
                             JOptionPane.showConfirmDialog(null, area, "ERROR!", JOptionPane.PLAIN_MESSAGE);
                         } else {
-                            // TODO: @wkr
                             db.executeUpdate("'" + textField_carriage_itemNameDisplay.getText() +
                                     "'", repository[0], "name", String.valueOf(all_num - num), "num");
                             Integer all_num_to = -1;
