@@ -239,7 +239,7 @@ public class Shopkeeper extends JFrame {
         nametemp.add("user_name");
         account.setData(returnVector.FromDBRead(db, "login", account.getTableName(), belongTo, "belongto"), resourceBundle);
 
-        addKeyListener(new MyListener(belongto, alltable, db, init));
+        addKeyListener(new MyListener(belongto, alltable, db, init, null));
     }
 
     public String getBelongto() { return this.belongto; }

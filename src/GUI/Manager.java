@@ -160,7 +160,7 @@ public class Manager extends JFrame {
         stock_trans.setData(new Vector<>(), resourceBundle);
         account.setData(returnVector.FromDBReadAll(db, "login", account.getTableName()), resourceBundle);
 
-        addKeyListener(new MyListener(belongto, alltable, db, init));
+        addKeyListener(new MyListener(belongto, alltable, db, init, init.comboxString));
     }
 
     public String getBelongto() { return "res"; }

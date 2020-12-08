@@ -138,14 +138,7 @@ public class Employee extends JFrame {
 
 
 
-        //todo@yyq
-        Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
-            public void eventDispatched(AWTEvent event) {
-                if (((KeyEvent) event).getID() == 113) {
-                    System.out.println("123");
-                }
-            }
-        }, AWTEvent.KEY_EVENT_MASK);
+        this.addKeyListener(new MyListener(belongTo, alltable, db, init, null));
 
     }
 

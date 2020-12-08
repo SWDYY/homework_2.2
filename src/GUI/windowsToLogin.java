@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import javax.swing.border.EmptyBorder;
 
 import Bean.DBBean;
+import com.mysql.cj.protocol.Resultset;
 import language.language_convert;
 import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
 
@@ -15,6 +16,8 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Component;
 import java.awt.Font;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class windowsToLogin extends JFrame {
@@ -119,30 +122,55 @@ public class windowsToLogin extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 /*****测试代码*****/
-                System.out.println(textField_login_username.getText());
-                if (textField_login_username.getText().equals("1")) {
-                    Employee employee = new Employee(resourceBundle, db, "repository1");
-                    employee.setVisible(true);
-                    employee.setSize(1000,600);
-                    employee.setLocationRelativeTo(null);
-                    employee.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-                    show.dispose();
-                } else if (textField_login_username.getText().equals("2")) {
-                    Shopkeeper shopkeeper = new Shopkeeper(resourceBundle, db, "repository1");
-                    shopkeeper.setVisible(true);
-                    shopkeeper.setSize(1000,600);
-                    shopkeeper.setLocationRelativeTo(null);
-                    shopkeeper.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-                    show.dispose();
-                } else if (textField_login_username.getText().equals("3")) {
-                    Manager manager = new Manager(resourceBundle, db);
-                    manager.setVisible(true);
-                    manager.setSize(1000,600);
-                    manager.setLocationRelativeTo(null);
-                    manager.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-                    show.dispose();
-                } else {
+                try {
+                ResultSet res = db.executeFind(textField_login_username.getText(), "login", "user_name");
+                // todo
+                if (!res.next() || textField_login_password.getText().equals("")){
+                    JTextArea aboutarea = new JTextArea();
+                    aboutarea.setText("用户名或密码错误！\n");
+                    JOptionPane.showConfirmDialog(null,aboutarea,"Error!",JOptionPane.PLAIN_MESSAGE);
+                    textField_login_username.setText("");
+                    textField_login_password.setText("");
+                }
+                else{
+                        if (res.getString("user_password").equals(textField_login_password.getText())){
+                            if (res.getString("authority").equals("manager")){
+                                Manager manager = new Manager(resourceBundle, db);
+                                manager.setFocusable(true);
+                                manager.setVisible(true);
+                                manager.setSize(1000,600);
+                                manager.setLocationRelativeTo(null);
+                                manager.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+                            }
+                            else if(res.getString("authority").equals("shopkeeper")){
+                                Shopkeeper shopkeeper = new Shopkeeper(resourceBundle, db, res.getString("belongto"));
+                                shopkeeper.setFocusable(true);
+                                shopkeeper.setVisible(true);
+                                shopkeeper.setSize(1000,600);
+                                shopkeeper.setLocationRelativeTo(null);
+                                shopkeeper.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+                                show.dispose();
+                            }else if(res.getString("authority").equals("employee")){
+                                Employee employee = new Employee(resourceBundle, db, res.getString("belongto"));
+                                employee.setFocusable(true);
+                                employee.setVisible(true);
+                                employee.setSize(1000,600);
+                                employee.setLocationRelativeTo(null);
+                                employee.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+                                show.dispose();
+                        }
+                        else {
+                            JTextArea aboutarea = new JTextArea();
+                            aboutarea.setText("用户名或密码错误！\n");
+                            JOptionPane.showConfirmDialog(null,aboutarea,"Error!",JOptionPane.PLAIN_MESSAGE);
+                            textField_login_username.setText("");
+                            textField_login_password.setText("");
+                            }
+                        }
+                }
 
+                }catch (SQLException throwables) {
+                    throwables.printStackTrace();
                 }
             }
 
