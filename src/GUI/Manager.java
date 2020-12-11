@@ -47,8 +47,6 @@ public class Manager extends JFrame {
     public Manager(ResourceBundle resourceBundle,DBBean db){
         this.db=db;
         this.init = new init_box(resourceBundle, db);
-        alltable = new MyJPanel[]{order, null, null, null, null, null,
-                stock_check, product, customer, account};
 
         myJPanel_productString = resourceBundle.getString("myJPanel_productString");//货品
         panel_customerStirng = resourceBundle.getString("panel_customerStirng");//客户
@@ -60,12 +58,12 @@ public class Manager extends JFrame {
         panel_orderListSring = resourceBundle.getString("panel_orderListSring");//订单列表
         panel_personalAccountSring = resourceBundle.getString("panel_personalAccountSring");//个人账户
 
-        menubar menu = new menubar(resourceBundle,this, db);
+//        menubar menu = new menubar(resourceBundle,this, db);
         JPanel totalPanel = new JPanel();
         totalPanel.setLayout(new BorderLayout());
         totalPanel.setPreferredSize( new Dimension(920, 600));
         totalPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-        this.setJMenuBar(menu);
+//        this.setJMenuBar(menu);
         tabbedPane_all = new JTabbedPane(JTabbedPane.SCROLL_TAB_LAYOUT);
         totalPanel.add(tabbedPane_all);
         show.getContentPane().add(totalPanel);
@@ -159,6 +157,12 @@ public class Manager extends JFrame {
         stock_check.setData(returnVector.FromDBReadAll(db, belongto, name_stock_check), resourceBundle);
         stock_trans.setData(new Vector<>(), resourceBundle);
         account.setData(returnVector.FromDBReadAll(db, "login", account.getTableName()), resourceBundle);
+
+        alltable = new MyJPanel[]{order, null, null, null, null, null,
+                stock_check, product, customer, account};
+
+        menubar menu = new menubar(resourceBundle,this, db, new Object[]{belongto, alltable, init.comboxString});
+        this.setJMenuBar(menu);
 
         addKeyListener(new MyListener(belongto, alltable, db, init, init.comboxString));
     }

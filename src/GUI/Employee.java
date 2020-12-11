@@ -58,8 +58,7 @@ public class Employee extends JFrame {
         panel_cashieringString = resourceBundle.getString("panel_cashieringString");//收银
         panel_orderListSring = resourceBundle.getString("panel_orderListSring");//订单列表
         panel_personalAccountSring = resourceBundle.getString("panel_personalAccountSring");//个人账户
-        menubar menu = new menubar(resourceBundle,this, db);
-        this.setJMenuBar(menu);
+
         try{
         org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();}
         catch(Exception e){}
@@ -95,8 +94,6 @@ public class Employee extends JFrame {
 
         /***开销售单***/
         Vector<Object> name_order_new = new Vector<>(Arrays.asList("product_name", "outprice", "num", "label_restore_totalBuyingPriceTitle"));
-        name_order_new.add("product_name"); name_order_new.add("outprice");
-        name_order_new.add("num"); name_order_new.add("label_restore_totalBuyingPriceTitle");
         order_new = new MyJPanel(name_order_new, 0, 3);
         tabbedPane_sell.add(order_new);
         tabbedPane_sell.addTab(panel_addingOrderStirng, order_new);
@@ -119,11 +116,11 @@ public class Employee extends JFrame {
         tabbedPane_all.add(panel_personalAccount);
         tabbedPane_all.addTab(panel_personalAccountSring, panel_personalAccount);
 
+
         // 设置box
         customer.setUp(init.customer(customer, db));
         Box[] temp = init.order_new(order_new, db, new MyJPanel[]{order_all}, belongto);
-        order_new.setUp(temp[0]);
-        order_new.setDown(temp[1]);
+        order_new.setUp(temp[0]); order_new.setDown(temp[1]);
         order_all.setUp(init.order_check(order_all, db, new MyJPanel[]{order_all}, new String[]{belongto}));
         order_all.setClickable(true, resourceBundle, db, belongto);
 
@@ -136,7 +133,8 @@ public class Employee extends JFrame {
         alltable = new MyJPanel[]{order_all, null, null, null, null, null,
                 null, product, customer, null};
 
-
+        menubar menu = new menubar(resourceBundle,this, db, new Object[]{belongto, alltable, null});
+        this.setJMenuBar(menu);
 
         this.addKeyListener(new MyListener(belongTo, alltable, db, init, null));
 

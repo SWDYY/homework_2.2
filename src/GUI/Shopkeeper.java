@@ -67,8 +67,6 @@ public class Shopkeeper extends JFrame {
         this.db=db;
         this.belongto = belongTo;
         init_box init = new init_box(resourceBundle, db);
-        alltable = new MyJPanel[]{order_all, order_uncheck, order_unpaid, order_finish, order_returning, order_returned,
-                stock_check, product, customer, account};
 
         myJPanel_productString = resourceBundle.getString("myJPanel_productString");//货品
         panel_customerStirng = resourceBundle.getString("panel_customerStirng");//客户
@@ -86,12 +84,10 @@ public class Shopkeeper extends JFrame {
         AccountSring = resourceBundle.getString("AccountSring");//账户
         panel_personalAccountSring = resourceBundle.getString("panel_personalAccountSring");//个人账户
 
-        menubar menu = new menubar(resourceBundle,this, db);
         JPanel totalPanel = new JPanel();
         totalPanel.setLayout(new BorderLayout());
         totalPanel.setPreferredSize( new Dimension(920, 600));
         totalPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-        this.setJMenuBar(menu);
         tabbedPane_all = new JTabbedPane(JTabbedPane.SCROLL_TAB_LAYOUT);
         totalPanel.add(tabbedPane_all);
         show.getContentPane().add(totalPanel);
@@ -238,6 +234,11 @@ public class Shopkeeper extends JFrame {
         Vector<Object> nametemp = new Vector<>();
         nametemp.add("user_name");
         account.setData(returnVector.FromDBRead(db, "login", account.getTableName(), belongTo, "belongto"), resourceBundle);
+
+        alltable = new MyJPanel[]{order_all, order_uncheck, order_unpaid, order_finish, order_returning, order_returned,
+                stock_check, product, customer, account};
+        menubar menu = new menubar(resourceBundle,this, db, new Object[]{belongto, alltable, null});
+        this.setJMenuBar(menu);
 
         addKeyListener(new MyListener(belongto, alltable, db, init, null));
     }

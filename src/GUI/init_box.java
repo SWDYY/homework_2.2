@@ -192,7 +192,7 @@ public class init_box {
         // 下方的box
         Box down = Box.createVerticalBox();
         Box down_up = Box.createHorizontalBox();
-        // todo @sxz
+
         JButton button_account_add = new JButton(but_addString);
         button_account_add.setHorizontalAlignment(SwingConstants.LEADING);
         down_up.add(button_account_add);
@@ -741,12 +741,12 @@ public class init_box {
         nametemp.add("ID"); nametemp.add("Name"); nametemp.add("price_all"); nametemp.add("State");
         int i = 0;
         for (MyJPanel temp : all) {
-            if (i == 0  && temp != null) temp.setData(returnVector.FromDBReadAll(db, belongto+"_order", temp.getTableName()), resourceBundle);  // 总订单
-            else if (0<i && i<6 && temp != null) temp.setData(returnVector.FromDBRead(db, belongto+"_order", nametemp, StateConvert(temp.getNow()), "State"), resourceBundle);
+            if (i == 0  && temp != null && !belongto.equals("repository_all")) temp.setData(returnVector.FromDBReadAll(db, belongto+"_order", temp.getTableName()), resourceBundle);  // 总订单
+            else if (0<i && i<6 && temp != null && !belongto.equals("repository_all")) temp.setData(returnVector.FromDBRead(db, belongto+"_order", nametemp, StateConvert(temp.getNow()), "State"), resourceBundle);
             else if (i == 6 && temp != null) {temp.setData(returnVector.FromDBReadAll(db, belongto, temp.getTableName()), resourceBundle);}  // 库存
             else if (i == 7 && temp != null) temp.setData(returnVector.FromDBReadAll(db, belongto, temp.getTableName()), resourceBundle); // 货品
             else if (i == 8 && temp != null) temp.setData(returnVector.FromDBReadAll(db, "customermanager", temp.getTableName()), resourceBundle); // 客户
-            else if (temp != null) temp.setData(returnVector.FromDBReadAll(db, "login", temp.getTableName()), resourceBundle); // 员工
+            else if (i == 9 && temp != null) temp.setData(returnVector.FromDBReadAll(db, "login", temp.getTableName()), resourceBundle); // 员工
             i++;
         }
     }

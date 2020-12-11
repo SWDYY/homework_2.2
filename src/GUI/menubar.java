@@ -3,6 +3,7 @@ package GUI;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import Bean.DBBean;
@@ -29,12 +30,15 @@ public class menubar extends JMenuBar {
     private JMenuItem menuItem_Font;
     private JMenuItem menuItem_help;
     private JMenuItem menuItem_about;
+    private JMenuItem menuItem_flash;
     private JRadioButtonMenuItem Chinese;
     private JRadioButtonMenuItem English;
     private JRadioButtonMenuItem German;
 
+    private DBBean db;
+    private Object[] para;
 
-    public menubar(ResourceBundle resourceBundle, JFrame jFrame, DBBean db) {
+    public menubar(ResourceBundle resourceBundle, JFrame jFrame, DBBean db, Object[] para) {
         MenuFileStirng = resourceBundle.getString("MenuFileStirng");//文件
         menuSettingStirng = resourceBundle.getString("menuSettingStirng");//设置
         menuHelpStirng = resourceBundle.getString("menuHelpStirng");//帮助
@@ -46,6 +50,9 @@ public class menubar extends JMenuBar {
         menuItem_FontSring = resourceBundle.getString("menuItem_FontSring");//字体
         menuItem_helpSring = resourceBundle.getString("menuItem_helpSring");//帮助
         menuItem_aboutSring = resourceBundle.getString("menuItem_aboutSring");//关于
+
+        this.db = db;
+        this.para = para;
 
         menuFile = new JMenu(MenuFileStirng);
         menuSetting = new JMenu(menuSettingStirng);
@@ -158,7 +165,20 @@ public class menubar extends JMenuBar {
         menuHelp.addSeparator();
         menuHelp.add(menuItem_about);
 
-
+        // 新建刷新加
+        // todo @sxz
+        menuItem_flash = new JMenuItem("刷新");
+        menuHelp.add(menuItem_flash);
+        menuItem_flash.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (para != null){
+                    init_box temp = new init_box(resourceBundle, db);
+                    temp.refresh(String.valueOf(para[0]), (MyJPanel[])para[1], db);
+                    if (para[2] != null) temp.refresh((List[])para[2], db);
+                }
+            }
+        });
     }
 }
 

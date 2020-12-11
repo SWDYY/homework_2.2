@@ -57,7 +57,7 @@ public class windowsToLogin extends JFrame {
         panel_total.setLayout(new BorderLayout());
         this.add(panel_total);
 
-        menubar menu = new menubar(resourceBundle,this, db);
+        menubar menu = new menubar(resourceBundle,this, db, null);
         this.setJMenuBar(menu);
         /*******登陆界面********/
         JPanel panel = new JPanel();
@@ -141,6 +141,7 @@ public class windowsToLogin extends JFrame {
                                 manager.setSize(1000,600);
                                 manager.setLocationRelativeTo(null);
                                 manager.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+                                show.dispose();
                             }
                             else if(res.getString("authority").equals("shopkeeper")){
                                 Shopkeeper shopkeeper = new Shopkeeper(resourceBundle, db, res.getString("belongto"));
