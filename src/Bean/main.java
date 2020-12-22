@@ -6,6 +6,8 @@ import java.sql.SQLException;
 public class main {
     public static void main(String[] args) throws SQLException {
         DBBean dbBean=new DBBean();
+        System.out.println(dbBean.executeFind("car", "repository1", "name").next());
+
 //        dbBean.executeQuery("customermanager(Name,PhoneNum)","'wkr','123456'");
 //        dbBean.executeQuery("customermanager(Name,PhoneNum)","'sxz','222222'");
 //        dbBean.executeQuery("customermanager(Name,PhoneNum)","'yqq','333333'");
@@ -23,11 +25,11 @@ public class main {
         //dbBean.executeQuery("nameandpassword(user_name,user_password,age)","'yzj','654321',10");
         //ResultSet resultSet=dbBean.executeQuery("wkr","nameandpassword","user_name");
 //        String password="1234567";
-        dbBean.executeCreateNewTable("repository1","repository");
-        dbBean.executeCreateNewTable("repository1_order","order");
-        dbBean.executeCreateNewTable("repository1_item_order","item_order");
+//        dbBean.executeCreateNewTable("repository1","repository");
+//        dbBean.executeCreateNewTable("repository1_order","order");
+//        dbBean.executeCreateNewTable("repository1_item_order","item_order");
 //        dbBean.executeDeleteTable("item1");
-        ResultSet resultSet=null;
+//        ResultSet resultSet=null;
 //        Vector<Vector<Object>> res = new Vector<Vector<Object>>();returnVector.FromDBRead(dbBean,"itemmanager","sxz","name");
 //        resultSet=dbBean.executeTablehead("itemmanager");
         //System.out.println(returnVector.getHeadName(dbBean,"ordermanager"));

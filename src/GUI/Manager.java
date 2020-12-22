@@ -2,7 +2,6 @@ package GUI;
 
 import Bean.DBBean;
 import op.returnVector;
-import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

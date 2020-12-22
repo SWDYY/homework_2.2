@@ -115,4 +115,23 @@ public class returnVector {
         }
         return result;
     }
+
+
+    /**
+     * 这个类 用来将数据库查询的结果转成Vector
+     * ResultSet -> Vector
+     * 二维Vector里面存的都是 String
+     */
+    public static Vector ResultSetToVector(ResultSet set) {
+        Vector vec = new Vector();
+        try {
+            while(set.next()){
+                Vector temp = new Vector();
+                for (int i=0; i<set.getFetchSize(); i++) temp.add(set.getString(i));
+                vec.add(temp);
+            }
+        }catch (SQLException e) { e.printStackTrace(); }
+        return vec;
+    }
+
 }
