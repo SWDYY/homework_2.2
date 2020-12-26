@@ -1,12 +1,13 @@
 package GUI;
 
 import Bean.DBBean;
-import iteration_3_yyq.fun_3;
 import op.returnVector;
+import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.Vector;
@@ -46,7 +47,7 @@ public class Shopkeeper extends JFrame {
     private String belongto;
     private MyJPanel[] alltable;
 
-    private fun_3 product; // 货品
+    private MyJPanel product; // 货品
     private MyJPanel customer;  // 客户
     private MyJPanel order_new;  // 开销售单
     private MyJPanel order_uncheck;  // 待审核
@@ -98,13 +99,9 @@ public class Shopkeeper extends JFrame {
         /***货品Panel***/
         Vector<Object> name_product = new Vector<>(Arrays.asList("id", "name", "outprice", "outprice_wholesale"));
         // todo @sxz
-        product = new fun_3(db, name_product, resourceBundle,"item");
+        product = new MyJPanel(name_product, 0,0);
         tabbedPane_all.add(product);
         tabbedPane_all.addTab(myJPanel_productString, product);
-
-//        product = new MyJPanel(name_product, 0,0);
-//        tabbedPane_all.add(product);
-//        tabbedPane_all.addTab(myJPanel_productString, product);
 
 
         /***客户Panel***/
@@ -214,7 +211,7 @@ public class Shopkeeper extends JFrame {
         order_finish.setDown(init.order_check_but(order_finish, db, related, belongto));
         order_returning.setDown(init.order_check_but(order_returning, db, related, belongto));
         order_all.setUp(init.order_check(order_all, db, related, new String[]{belongto}));
-//        temp = init.stock_in(stock_in, db, new MyJPanel[]{product, stock_check}, belongto);
+        temp = init.stock_in(stock_in, db, new MyJPanel[]{product, stock_check}, belongto);
         stock_in.setUp(temp[0]);
         stock_check.setUp(init.stock_check(stock_check, db, new String[]{belongto}));
         order_uncheck.setClickable(true, resourceBundle, db, belongto);
@@ -225,7 +222,7 @@ public class Shopkeeper extends JFrame {
 
 
         // 读数据
-//        product.setData(returnVector.FromDBReadAll(db, belongTo, name_product), resourceBundle);
+        product.setData(returnVector.FromDBReadAll(db, belongTo, name_product), resourceBundle);
         customer.setData(returnVector.FromDBReadAll(db, "customermanager", name_customer), resourceBundle);
         order_new.setData(new Vector<>(), resourceBundle);
         for (int i = 1; i < 6; i++){
@@ -238,8 +235,8 @@ public class Shopkeeper extends JFrame {
         nametemp.add("user_name");
         account.setData(returnVector.FromDBRead(db, "login", account.getTableName(), belongTo, "belongto"), resourceBundle);
 
-//        alltable = new MyJPanel[]{order_all, order_uncheck, order_unpaid, order_finish, order_returning, order_returned,
-//                stock_check, product, customer, account};
+        alltable = new MyJPanel[]{order_all, order_uncheck, order_unpaid, order_finish, order_returning, order_returned,
+                stock_check, product, customer, account};
         menubar menu = new menubar(resourceBundle,this, db, new Object[]{belongto, alltable, null});
         this.setJMenuBar(menu);
 

@@ -32,7 +32,6 @@ public class MyListener implements KeyListener {
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode()==116) {
             if (all != null) init.refresh(belongto, all, db);
-            if (combox != null) init.refresh(combox, db);
         }
     }
 

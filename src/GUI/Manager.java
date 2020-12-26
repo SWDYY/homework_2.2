@@ -1,11 +1,14 @@
 package GUI;
 
 import Bean.DBBean;
+import iteration_3_yyq.fun_3;
 import op.returnVector;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.Vector;
@@ -24,6 +27,11 @@ public class Manager extends JFrame {
     private String AccountSring;//账户
     private String panel_orderListSring;//订单列表
     private String panel_personalAccountSring;//个人账户
+    private String statistics_all; // 统计
+    private String statistics_stock; // 库存统计
+    private String statistics_sale; //销售统计
+    private String statistics_payment; // 客户付款情况
+    private String statistics_purchase; // 客户购买情况
 
     private Manager show = this;
     private JTabbedPane tabbedPane_all;
@@ -34,8 +42,15 @@ public class Manager extends JFrame {
     private MyJPanel stock_in = null;  // 进货
     private MyJPanel stock_check;  // 清点
     private MyJPanel stock_trans;  // 货品调配
+    private MyJPanel stock_statistics; //库存统计
+    private fun_3 sale_statistics; //销售统计
+    private fun_3 payment_statistics; // 客户付款情况
+    private fun_3 purchase_statistics; // 客户购买情况
+    private MyJPanel customersFund_statistics; //客户资金统计
     private MyJPanel account; // 用户
     private JPanel stock;  // 库存总面板
+    private JPanel statistics; //统计总面板
+    private JPanel panel_revenue_statistics; //营收统计面板
     private panelForPersonalAccount panel_personalAccount;
 
     private init_box init = null;  // 初始化语言
@@ -56,6 +71,12 @@ public class Manager extends JFrame {
         AccountSring = resourceBundle.getString("AccountSring");//账户
         panel_orderListSring = resourceBundle.getString("panel_orderListSring");//订单列表
         panel_personalAccountSring = resourceBundle.getString("panel_personalAccountSring");//个人账户
+        statistics_all = resourceBundle.getString("statistics");
+        statistics_stock = resourceBundle.getString("statistics_stock");
+        statistics_sale = resourceBundle.getString("statistics_sale");
+        statistics_payment = resourceBundle.getString("statistics_payment");
+        statistics_purchase = resourceBundle.getString("statistics_purchase");
+
 
 //        menubar menu = new menubar(resourceBundle,this, db);
         JPanel totalPanel = new JPanel();
@@ -129,6 +150,72 @@ public class Manager extends JFrame {
         tabbedPane_all.add(account);
         tabbedPane_all.addTab(AccountSring, account);
 
+        //@yzj
+        /***统计Panel***/
+        statistics = new JPanel();
+        statistics.setPreferredSize(new Dimension(920,600));
+        statistics.setLayout(new BorderLayout());
+        tabbedPane_all.add(statistics);
+        tabbedPane_all.addTab(statistics_all,statistics);
+        JTabbedPane tabbedPane_statistics = new JTabbedPane();
+        statistics.add(tabbedPane_statistics);
+
+        /***库存统计subPanel***/
+        Vector<Object> name_stock_statistics = new Vector<>(Arrays.asList("id","name","num","inprice", "total"));
+        stock_statistics = new MyJPanel(name_stock_statistics,0,0);
+        tabbedPane_statistics.add(stock_statistics);
+        tabbedPane_statistics.addTab(statistics_stock,stock_statistics);
+
+
+        /***销售统计subPanel***/
+        Vector<Object> name_sale_order = new Vector<>(Arrays.asList("name","out","back"));
+        sale_statistics = new fun_3(db, name_sale_order, resourceBundle, "item");
+        tabbedPane_statistics.add(sale_statistics);
+        tabbedPane_statistics.addTab(statistics_sale,sale_statistics);
+
+        /***客户付款情况统计subPanel***/
+        Vector<Object> payment_header = new Vector<>(Arrays.asList("name","order_id","state","price_all"));
+        payment_statistics = new fun_3(db, payment_header, resourceBundle, "payment");
+        tabbedPane_statistics.add(payment_statistics);
+        tabbedPane_statistics.addTab(statistics_payment,payment_statistics);
+
+        /***客户购买情况统计subPanel***/
+        Vector<Object> purchase_header = new Vector<>(Arrays.asList("name","product_name","num"));
+        purchase_statistics = new fun_3(db, purchase_header, resourceBundle, "customer");
+        tabbedPane_statistics.add(purchase_statistics);
+        tabbedPane_statistics.addTab(statistics_purchase,purchase_statistics);
+
+
+        /***经营状况统计subPanel***/
+        panel_revenue_statistics = new JPanel();
+        panel_revenue_statistics.setLayout(new BorderLayout());
+        Box horizontalBox = Box.createHorizontalBox();
+        Box verticalBox = Box.createVerticalBox();
+        verticalBox.add(Box.createVerticalStrut(100));
+        verticalBox.add(horizontalBox);
+
+        JLabel label_revenue_statistics = new JLabel("选择店铺    ");
+        label_revenue_statistics.setFont(new Font("仿宋",Font.BOLD+Font.ITALIC,30));
+        JComboBox comboBox_revenue_statistics = new JComboBox(init.comboxString[0].toArray());
+        comboBox_revenue_statistics.setPreferredSize(new Dimension(300,30));
+        JButton button_revenue_statistics = new JButton("确 认");
+        button_revenue_statistics.setPreferredSize(new Dimension(100,30));
+        horizontalBox.add(Box.createHorizontalGlue());
+        horizontalBox.add(label_revenue_statistics);
+        horizontalBox.add(comboBox_revenue_statistics);
+        horizontalBox.add(button_revenue_statistics);
+        horizontalBox.add(Box.createHorizontalGlue());
+        panel_revenue_statistics.add(verticalBox,BorderLayout.NORTH);
+        button_revenue_statistics.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panel_revenue_statistics.add(new panelForRevenue(String.valueOf(comboBox_revenue_statistics.getSelectedItem()),db),BorderLayout.CENTER);
+            }
+        });
+
+
+        tabbedPane_statistics.add(panel_revenue_statistics);
+        tabbedPane_statistics.add("经营状况统计",panel_revenue_statistics);
 
         /***个人账户Panel***/
         panel_personalAccount = new panelForPersonalAccount(resourceBundle, db);
@@ -146,7 +233,8 @@ public class Manager extends JFrame {
         stock_in.setUp(temp[0]); stock_in.setDown(temp[1]);
         stock_check.setUp(init.stock_check_manager(stock_check, db));
         account.setUp(init.account(account, db));
-
+        stock_statistics.setUp(init.stockStatistics(stock_statistics,db, resourceBundle));
+        //sale_statistics.setUp(init.)
 
         // 读数据
         product.setData(returnVector.FromDBReadAll(db, belongto, name_product), resourceBundle);
@@ -156,6 +244,9 @@ public class Manager extends JFrame {
         stock_check.setData(returnVector.FromDBReadAll(db, belongto, name_stock_check), resourceBundle);
         stock_trans.setData(new Vector<>(), resourceBundle);
         account.setData(returnVector.FromDBReadAll(db, "login", account.getTableName()), resourceBundle);
+        sale_statistics.setData(new Vector(), resourceBundle);
+        payment_statistics.setData(new Vector(), resourceBundle);
+        purchase_statistics.setData(new Vector(), resourceBundle);
 
         alltable = new MyJPanel[]{order, null, null, null, null, null,
                 stock_check, product, customer, account};

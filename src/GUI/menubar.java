@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Vector;
 
 import Bean.DBBean;
 import language.language_convert;
@@ -175,7 +176,7 @@ public class menubar extends JMenuBar {
                 if (para != null){
                     init_box temp = new init_box(resourceBundle, db);
                     temp.refresh(String.valueOf(para[0]), (MyJPanel[])para[1], db);
-                    if (para[2] != null) temp.refresh((List[])para[2], db);
+                    if (para[2] != null) temp.refresh((Vector[])para[2], db);
                 }
             }
         });

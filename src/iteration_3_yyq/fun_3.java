@@ -134,7 +134,6 @@ public class fun_3 extends JPanel{
         // 复选框
         comboBoxString = new List[1];
         comboBoxString[0] = new ArrayList();
-//        comboBoxString[0].add("repository_all");
         comboBoxString[0].addAll(windowsForAddEmployeeAccount.jcombobox_string(db, "repository_name","name"));
         comboBox = new JComboBox(comboBoxString[0].toArray());
         // 查找部分
@@ -393,10 +392,10 @@ public class fun_3 extends JPanel{
 
 
 
-        /**
-         * 客户结款信息的统计，一个客户，一个店
-         * @return 二维数组（客户名，订单id，订单状态，订单总金额）
-         */
+    /**
+     * 客户结款信息的统计，一个客户，一个店
+     * @return 二维数组（客户名，订单id，订单状态，订单总金额）
+     */
     public Vector fun_4_payment(String customer, String belongto){
         // 根据名字查他的订单
         ResultSet res = db.executeFind(customer, belongto+"_order", "name");

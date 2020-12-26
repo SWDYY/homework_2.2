@@ -58,9 +58,10 @@ public class DBBean {
         int result = 0;
         String sql = null;
         if(type.equals("order")){
+            //wkr
             sql = "create table " + tableName +
                     "(id int NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
-                    "name varchar(100) NOT NULL UNIQUE KEY" +
+                    "name varchar(100) NOT NULL " +
                     ",state varchar(100) NOT NULL" +
                     ",orders varchar(100) NOT NULL"+
                     ",price_all float,num int NOT NULL" +

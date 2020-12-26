@@ -43,7 +43,7 @@ public class init_box {
     private String starttrans; // 开始运输
     private String accout_name; // 员工名
 
-    public List[] comboxString;
+    public Vector[] comboxString;
 
     public init_box(ResourceBundle resourceBundle, DBBean db) {
         this.resourceBundle=resourceBundle;
@@ -69,14 +69,14 @@ public class init_box {
         starttrans= resourceBundle.getString("starttrans"); // 开始运输
         accout_name=resourceBundle.getString("accout_name"); // 员工姓名
 
-        comboxString = new List[2];
-        List withall = new ArrayList();
-        withall.add("repository_all");
-        withall.addAll(windowsForAddEmployeeAccount.jcombobox_string(db, "repository_name","name"));
-        List withoutall = new ArrayList();
-        withoutall.addAll(windowsForAddEmployeeAccount.jcombobox_string(db, "repository_name","name"));
-        comboxString[0] = withall;
-        comboxString[1] = withoutall;
+        comboxString = new Vector[2];
+        comboxString[0] = new Vector();
+        comboxString[1] = new Vector();
+        comboxString[0].add("repository_all");
+        for (String temp : windowsForAddEmployeeAccount.jcombobox_string(db, "repository_name","name")){
+            comboxString[0].add(temp);
+            comboxString[1].add(temp);
+        }
     }
 
 
@@ -88,7 +88,7 @@ public class init_box {
      */
     public Box product(MyJPanel table, DBBean db){
         Box res = Box.createHorizontalBox();
-        JComboBox comboBox = new JComboBox(comboxString[0].toArray());
+        JComboBox comboBox = new JComboBox(comboxString[0]);
         comboBox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
@@ -204,6 +204,9 @@ public class init_box {
         down_down.add(textField_addOrder_totalPriceDisplay);
         down_down.add(new JLabel(yuan_String));
         down_down.add(Box.createHorizontalStrut(300));
+        // @sxz
+        JButton button_addOrder_pay = new JButton("付款");
+        down_down.add(button_addOrder_pay);
         JButton button_addOrder_save = new JButton(saveString);
         down_down.add(button_addOrder_save);
         down.add(down_up);
@@ -282,6 +285,20 @@ public class init_box {
                 }
             }
         });
+        // 付款按键绑定
+        button_addOrder_pay.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame a = new JFrame("pay");
+                JPanel b = new JPanel();
+                a.setContentPane(b);
+                JLabel c= new JLabel();
+                c.setIcon(new ImageIcon("src/1.jpg"));
+                b.add(c);
+                a.setVisible(true);
+                a.pack();
+            }
+        });
 
         return new Box[]{up, down};
     }
@@ -325,8 +342,16 @@ public class init_box {
                                     JOptionPane.showConfirmDialog(null, area, "ERROR!", JOptionPane.PLAIN_MESSAGE);
                                 }
                                 else if(old_num-buy_num>=0){
+                                    //wkr
+
                                     db.executeUpdate("'" + item_name +
                                             "'", belongTo, "name",String.valueOf(old_num-buy_num) , "num");
+                                    ResultSet restitem = db.executeFind(item_name, "restitem_all", "name");
+                                    restitem.next();
+                                    int rest_num=Integer.valueOf(restitem.getString("num"));
+                                    System.out.println("==================================================");
+                                    db.executeUpdate("'" + item_name +
+                                            "'", "restitem_all", "name",String.valueOf(rest_num-buy_num) , "num");
                                 }
                             }
 
@@ -413,7 +438,7 @@ public class init_box {
         Box res = Box.createVerticalBox();
 
         Box up = Box.createHorizontalBox();
-        JComboBox comboBox = new JComboBox(comboxString[1].toArray());
+        JComboBox comboBox = new JComboBox(comboxString[1]);
         String[] trans = new String[]{String.valueOf(comboBox.getSelectedItem())};
         comboBox.addItemListener(new ItemListener() {
             @Override
@@ -458,7 +483,7 @@ public class init_box {
             @Override
             public void actionPerformed(ActionEvent e) {
                 windowsToCreateItemForManager winToCreateItemForManager;
-                if (belongto.equals("repostory_all")){
+                if (belongto.equals("repository_all")){
                      winToCreateItemForManager = new windowsToCreateItemForManager(resourceBundle, table, textField_restore_totalBuyingPriceDisplay);
                 }
                 else{
@@ -478,6 +503,9 @@ public class init_box {
                 for (Object temp : table.getModel().getDataVector()) {
                     Vector<Object> v = (Vector<Object>)temp;
                     db.executeQuery( belongto+"(name,outprice,inprice,num,outprice_wholesale)", "'"+v.get(0)+"',"+v.get(3)+","+v.get(2)+","+v.get(1)+","+v.get(4) );
+                    //wkr
+                    if(belongto.equals("repository_all"))
+                        db.executeQuery( "restitem_all"+"(name,outprice,inprice,num,outprice_wholesale)", "'"+v.get(0)+"',"+v.get(3)+","+v.get(2)+","+v.get(1)+","+v.get(4) );
                 }
                 // 重读
                 table.setData(new Vector<>(), resourceBundle);
@@ -572,7 +600,7 @@ public class init_box {
         Box res = Box.createVerticalBox();
 
         Box up = Box.createHorizontalBox();
-        JComboBox comboBox = new JComboBox(comboxString[0].toArray());
+        JComboBox comboBox = new JComboBox(comboxString[0]);
         String[] trans = new String[]{String.valueOf(comboBox.getSelectedItem())};
         comboBox.addItemListener(new ItemListener() {
             @Override
@@ -615,7 +643,7 @@ public class init_box {
         JLabel label_from = new JLabel(fromRepository);
         horizontalBox_up.add(label_from);
 
-        JComboBox comboBox_from = new JComboBox(comboxString[0].toArray());
+        JComboBox comboBox_from = new JComboBox(comboxString[0]);
         horizontalBox_up.add(comboBox_from);
 
         Component horizontalGlue = Box.createHorizontalGlue();
@@ -632,7 +660,7 @@ public class init_box {
         label_to.setHorizontalAlignment(SwingConstants.CENTER);
         horizontalBox_up.add(label_to);
 
-        JComboBox comboBox_to = new JComboBox(comboxString[0].toArray());
+        JComboBox comboBox_to = new JComboBox(comboxString[0]);
         horizontalBox_up.add(comboBox_to);
 
         JButton button_savePath = new JButton(confirmString);
@@ -740,11 +768,25 @@ public class init_box {
         Vector<Object> nametemp = new Vector<>();
         nametemp.add("ID"); nametemp.add("Name"); nametemp.add("price_all"); nametemp.add("State");
         int i = 0;
+//        List withall = new ArrayList();
+//        withall.add("repository_all");
+//        withall.addAll(windowsForAddEmployeeAccount.jcombobox_string(db, "repository_name","name"));
+//        List withoutall = new ArrayList();
+//        withoutall.addAll(windowsForAddEmployeeAccount.jcombobox_string(db, "repository_name","name"));
+//        comboxString[0] = withall;
+//        System.out.println(comboxString[0]);
+//        comboxString[1] = withoutall;
         for (MyJPanel temp : all) {
+            //System.out.println(comboxString[0]);
             if (i == 0  && temp != null && !belongto.equals("repository_all")) temp.setData(returnVector.FromDBReadAll(db, belongto+"_order", temp.getTableName()), resourceBundle);  // 总订单
             else if (0<i && i<6 && temp != null && !belongto.equals("repository_all")) temp.setData(returnVector.FromDBRead(db, belongto+"_order", nametemp, StateConvert(temp.getNow()), "State"), resourceBundle);
-            else if (i == 6 && temp != null) {temp.setData(returnVector.FromDBReadAll(db, belongto, temp.getTableName()), resourceBundle);}  // 库存
-            else if (i == 7 && temp != null) temp.setData(returnVector.FromDBReadAll(db, belongto, temp.getTableName()), resourceBundle); // 货品
+            else if (i == 6 && temp != null) {
+                //temp.setUp(this.product(temp,db));
+                temp.setData(returnVector.FromDBReadAll(db, belongto, temp.getTableName()), resourceBundle);}  // 库存
+            else if (i == 7 && temp != null){
+                //temp.setUp(this.product(temp,db));
+                temp.setData(returnVector.FromDBReadAll(db, belongto, temp.getTableName()), resourceBundle); // 货品
+            }
             else if (i == 8 && temp != null) temp.setData(returnVector.FromDBReadAll(db, "customermanager", temp.getTableName()), resourceBundle); // 客户
             else if (i == 9 && temp != null) temp.setData(returnVector.FromDBReadAll(db, "login", temp.getTableName()), resourceBundle); // 员工
             i++;
@@ -752,10 +794,13 @@ public class init_box {
     }
 
 
-    public void refresh(List[] all, DBBean db){
-        for (List temp : all){
-            temp.removeAll(windowsForAddEmployeeAccount.jcombobox_string(db, "repository_name","name"));
-            temp.add(windowsForAddEmployeeAccount.jcombobox_string(db, "repository_name","name"));
+    public void refresh(Vector[] all, DBBean db){
+        all[0].clear();
+        all[1].clear();
+        all[0].add("repository_all");
+        for (String temp : windowsForAddEmployeeAccount.jcombobox_string(db, "repository_name","name")){
+            all[0].add(temp);
+            all[1].add(temp);
         }
     }
     /**
@@ -781,5 +826,42 @@ public class init_box {
         return res;
     }
 
+    //yzj
+    /**
+     * 经理页面中的库存统计
+     * @param table 库存统计subPanel
+     * @param db 数据库
+     * @return
+     */
+    public Box stockStatistics(MyJPanel table, DBBean db, ResourceBundle resourceBundle){
+        Box horizontalBox = Box.createHorizontalBox();
+        //yzj
+        JComboBox comboBox_stock_statistics = new JComboBox(comboxString[0]);
+        comboBox_stock_statistics.setPreferredSize(new Dimension(300,30));
+        JTextField textField_stock_statistics = new JTextField();
+        textField_stock_statistics.setPreferredSize(new Dimension(400,30));
+        JButton button_stock_statistics_search = new JButton("查 询");
+        button_stock_statistics_search.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                table.getTableName().remove("total");
+                Vector show;
+                if (String.valueOf(comboBox_stock_statistics.getSelectedItem()).equals("repository_all"))
+                    show = returnVector.FromDBReadAll(db, "restitem_all", table.getTableName());
+                else show = returnVector.FromDBReadAll(db, String.valueOf(comboBox_stock_statistics.getSelectedItem())+"restitem", table.getTableName());
+                for (Object temp : show){
+                    float total = Float.parseFloat(String.valueOf(((Vector)temp).get(2))) * Float.parseFloat(String.valueOf(((Vector)temp).get(3)));
+                    ((Vector)temp).add(total);
+                }
+                table.getTableName().add("total");
+                table.setData(show, resourceBundle);
+            }
+        });
+        horizontalBox.add(comboBox_stock_statistics);
+        horizontalBox.add(textField_stock_statistics);
+        horizontalBox.add(button_stock_statistics_search);
+
+        return horizontalBox;
+    }
 
 }
