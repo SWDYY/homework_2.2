@@ -129,36 +129,46 @@ public class fun_3 extends JPanel{
      */
     public fun_3(DBBean db, Vector header, ResourceBundle resourceBundle, String use){
         this.db = db;
+        this.setLayout(new BorderLayout());
 
         // 上面摆放
+
+        Box horizontalBox_up = Box.createHorizontalBox();
         // 复选框
         comboBoxString = new List[1];
         comboBoxString[0] = new ArrayList();
         comboBoxString[0].addAll(windowsForAddEmployeeAccount.jcombobox_string(db, "repository_name","name"));
         comboBox = new JComboBox(comboBoxString[0].toArray());
+        comboBox.setPreferredSize(new Dimension(300,30));
+        horizontalBox_up.add(comboBox);
         // 查找部分
-        find_label = new JLabel("请输入查找关键字");
-        find_textfield = new JTextField(""); // @yzj 设大小
-        find_button = new JButton("查找");
-        Box find_box = Box.createHorizontalBox();
-        find_box.add(find_label); find_box.add(find_textfield); find_box.add(find_button);
-        Box box = Box.createVerticalBox();
-        box.add(comboBox); box.add(find_box);
-        this.add(box, BorderLayout.NORTH);
+        find_label = new JLabel("    请输入查找关键字");
+        find_textfield = new JTextField();
+        find_button = new JButton("查 询");
+        horizontalBox_up.add(find_label);
+        horizontalBox_up.add(find_textfield);
+        horizontalBox_up.add(find_button);
+//        Box find_box = Box.createHorizontalBox();
+//        find_box.add(find_label); find_box.add(find_textfield); find_box.add(find_button);
+//        Box box = Box.createVerticalBox();
+//        box.add(comboBox); box.add(find_box);
+//        this.add(box, BorderLayout.NORTH);
+
 
         // 下面table的摆放
         table = new MyJPanel(header, 0, 0);
         this.add(table, BorderLayout.CENTER);
+        table.setUp(horizontalBox_up);
 
         if (use.equals("payment")){
-            Box down = Box.createHorizontalBox();
-            down.add(new JLabel("未结款"));
+            Box horizontalBox_down = Box.createHorizontalBox();
+            horizontalBox_down.add(new JLabel("未结款"));
             unpaid = new JTextField("");
-            down.add(unpaid);
-            down.add(new JLabel("已付款款"));
+            horizontalBox_down.add(unpaid);
+            horizontalBox_down.add(new JLabel("已付款款"));
             paid = new JTextField("");
-            down.add(paid);
-            this.add(down, BorderLayout.SOUTH);
+            horizontalBox_down.add(paid);
+            table.setDown(horizontalBox_down);
         }
 
 
