@@ -501,11 +501,41 @@ public class init_box {
             public void actionPerformed(ActionEvent e) {
                 // 更新数据库
                 for (Object temp : table.getModel().getDataVector()) {
+                    boolean flag=false;
                     Vector<Object> v = (Vector<Object>)temp;
-                    db.executeQuery( belongto+"(name,outprice,inprice,num,outprice_wholesale)", "'"+v.get(0)+"',"+v.get(3)+","+v.get(2)+","+v.get(1)+","+v.get(4) );
+                    String name=String.valueOf(((Vector<?>) temp).get(0));
+                    int num=Integer.valueOf(String.valueOf(((Vector<?>) temp).get(1)));
+                    ResultSet tmp=db.executeFindAll(belongto);
+                    try {
+                        while(tmp.next()){
+                            String db_name=tmp.getString("name");
+                            if(db_name.equals(name)){
+                                int db_num=Integer.valueOf(tmp.getString("num"));
+                                db.executeUpdate("'" + name +
+                                        "'", belongto, "name", String.valueOf(db_num + num), "num");
+                                flag=true;
+                                if(belongto.equals("repository_all")){
+                                    ResultSet tmp2=db.executeFind(name,belongto,"name");
+                                    tmp2.next();
+                                    db.executeUpdate("'" + name +
+                                            "'","restitem_all", "name", String.valueOf(Integer.valueOf(tmp2.getString("num")) + num), "num");
+                                }
+
+                                break;
+                            }
+
+                        }
+                        if(!flag) {
+                            db.executeQuery(belongto + "(name,outprice,inprice,num,outprice_wholesale)", "'" + v.get(0) + "'," + v.get(3) + "," + v.get(2) + "," + v.get(1) + "," + v.get(4));
+                            if (belongto.equals("repository_all"))
+                                db.executeQuery("restitem_all" + "(name,outprice,inprice,num,outprice_wholesale)", "'" + v.get(0) + "'," + v.get(3) + "," + v.get(2) + "," + v.get(1) + "," + v.get(4));
+                        }
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+
                     //wkr
-                    if(belongto.equals("repository_all"))
-                        db.executeQuery( "restitem_all"+"(name,outprice,inprice,num,outprice_wholesale)", "'"+v.get(0)+"',"+v.get(3)+","+v.get(2)+","+v.get(1)+","+v.get(4) );
+
                 }
                 // 重读
                 table.setData(new Vector<>(), resourceBundle);
