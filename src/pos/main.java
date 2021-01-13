@@ -55,6 +55,7 @@ public class main {
     public static void main(String[] argv) throws Exception {
         initGlobalFontSetting(new Font("仿宋", Font.PLAIN, 15));  //统一设置字体
         org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
+
         main a = new main(null, new DBBean(), "repository1");
     }
 
@@ -77,15 +78,11 @@ public class main {
         table = new JTable();
         init();
         jf.add(up, BorderLayout.NORTH);
-//        jp.add(up);
         jf.add(jsp, BorderLayout.CENTER);
         jf.add(down, BorderLayout.SOUTH);
 
         jf.pack();
         jf.setVisible(true);
-
-
-
     }
 
 
