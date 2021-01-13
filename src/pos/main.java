@@ -5,6 +5,7 @@ import GUI.MyJPanel;
 import language.language_convert;
 
 import javax.swing.*;
+import javax.swing.plaf.FontUIResource;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
@@ -39,7 +41,20 @@ public class main {
     private String belongto = null;
 
 
-    public static void main(String[] argv){
+    //设置全局字体
+    public static void initGlobalFontSetting(Font fnt){
+        FontUIResource fontRes = new FontUIResource(fnt);
+        for(Enumeration keys = UIManager.getDefaults().keys(); keys.hasMoreElements();){
+            Object key = keys.nextElement();
+            Object value = UIManager.get(key);
+            if(value instanceof FontUIResource)
+                UIManager.put(key, fontRes);
+        }
+    }
+
+    public static void main(String[] argv) throws Exception {
+        initGlobalFontSetting(new Font("仿宋", Font.PLAIN, 15));  //统一设置字体
+        org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
         main a = new main(null, new DBBean(), "repository1");
     }
 
@@ -58,11 +73,14 @@ public class main {
 
         // UI摆放
         JFrame jf = new JFrame("pos");
+        JPanel jp = new JPanel();
         table = new JTable();
         init();
         jf.add(up, BorderLayout.NORTH);
+//        jp.add(up);
         jf.add(jsp, BorderLayout.CENTER);
         jf.add(down, BorderLayout.SOUTH);
+
         jf.pack();
         jf.setVisible(true);
 
@@ -73,7 +91,13 @@ public class main {
 
     private void init() {
         up = Box.createHorizontalBox();
-        up.add(new JLabel(product_name));
+//        up.add(new JLabel(product_name));
+        JTextField temp123 = new JTextField("         "+product_name);
+        temp123.setEditable(false);
+        temp123.setEnabled(false);
+        temp123.setPreferredSize(new Dimension(10,30));
+        up.add(temp123);
+
         up_text = new JTextField("");
         up.add(up_text);
         up_botton = new JButton(confirmString);
