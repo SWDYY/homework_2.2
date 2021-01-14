@@ -10,6 +10,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -152,7 +154,6 @@ public class main {
                 } catch (SQLException err) {
                     System.out.println("查询错误");
                 }
-
             }
         });
 
@@ -187,6 +188,55 @@ public class main {
                     model.setRowCount(0);
                     down_text.setText("0");
                 }
+            }
+        });
+        up_text.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode()==10) {
+                    try {
+                        String name = up_text.getText();
+                        ResultSet res = db.executeFind(up_text.getText(), belongto, "name");
+                        if (res.next()) {
+                            boolean flag = true;
+                            for (int i = 0; i < model.getRowCount(); i++) {
+                                // 前面买过一个
+                                if (name.equals(model.getValueAt(i, 0))) {
+                                    flag = false;
+                                    // 改数量
+                                    int oldnum = Integer.parseInt(model.getValueAt(i, 1).toString());
+                                    model.setValueAt(oldnum + 1, i, 1);
+                                    // 改这一个物品的总价
+                                    float price = Float.parseFloat(model.getValueAt(i, 2).toString());
+                                    model.setValueAt((oldnum + 1) * price, i, 3);
+                                    // 该这一单的总价
+                                }
+                            }
+                            // 之前没买过
+                            if (flag) {
+                                Vector temp = new Vector();
+                                temp.add(up_text.getText());
+                                temp.add(1);
+                                temp.add(res.getFloat("outprice"));
+                                temp.add(res.getFloat("outprice"));
+                                model.addRow(temp);
+                            }
+                            down_text.setText(String.valueOf(price_all()));
+                        }
+                    } catch (SQLException err) {
+                        System.out.println("查询错误");
+                    }
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
             }
         });
     }
