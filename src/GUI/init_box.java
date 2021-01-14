@@ -856,7 +856,7 @@ public class init_box {
         return res;
     }
 
-    //yzj
+
     /**
      * 经理页面中的库存统计
      * @param table 库存统计subPanel
@@ -868,17 +868,18 @@ public class init_box {
         //yzj
         JComboBox comboBox_stock_statistics = new JComboBox(comboxString[0]);
         comboBox_stock_statistics.setPreferredSize(new Dimension(300,30));
-        JTextField textField_stock_statistics = new JTextField();
-        textField_stock_statistics.setPreferredSize(new Dimension(400,30));
+//        JTextField textField_stock_statistics = new JTextField();
+//        textField_stock_statistics.setPreferredSize(new Dimension(400,30));
         JButton button_stock_statistics_search = new JButton("查 询");
         button_stock_statistics_search.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 table.getTableName().remove("total");
                 Vector show;
+//                show = returnVector.FromDBReadAll(db, "restitem_all", table.getTableName());
                 if (String.valueOf(comboBox_stock_statistics.getSelectedItem()).equals("repository_all"))
                     show = returnVector.FromDBReadAll(db, "restitem_all", table.getTableName());
-                else show = returnVector.FromDBReadAll(db, String.valueOf(comboBox_stock_statistics.getSelectedItem())+"restitem", table.getTableName());
+                else show = returnVector.FromDBReadAll(db, String.valueOf(comboBox_stock_statistics.getSelectedItem()), table.getTableName());
                 for (Object temp : show){
                     float total = Float.parseFloat(String.valueOf(((Vector)temp).get(2))) * Float.parseFloat(String.valueOf(((Vector)temp).get(3)));
                     ((Vector)temp).add(total);
@@ -888,7 +889,7 @@ public class init_box {
             }
         });
         horizontalBox.add(comboBox_stock_statistics);
-        horizontalBox.add(textField_stock_statistics);
+//        horizontalBox.add(textField_stock_statistics);
         horizontalBox.add(button_stock_statistics_search);
 
         return horizontalBox;

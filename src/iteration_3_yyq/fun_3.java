@@ -91,7 +91,7 @@ public class fun_3 extends JPanel{
                         Vector data = fun_4_payment(belongto);
                         float unpaidnum = 0; float paidnum = 0;
                         for (Object temp :data){
-                            if (((Vector)temp).get(2).equals("未付款")) unpaidnum+=Float.parseFloat((String)((Vector)temp).get(3));
+                            if (((Vector)temp).get(2).equals("待收款")) unpaidnum+=Float.parseFloat((String)((Vector)temp).get(3));
                             if (((Vector)temp).get(2).equals("已完成")) paidnum+=Float.parseFloat((String)((Vector)temp).get(3));
                         }
                         table.setData(data, resourceBundle);
@@ -109,7 +109,7 @@ public class fun_3 extends JPanel{
                         Vector data = fun_4_payment(find_textfield.getText(), belongto);
                         float unpaidnum = 0; float paidnum = 0;
                         for (Object temp :data){
-                            if (((Vector)temp).get(2).equals("未付款")) unpaidnum+=Float.parseFloat((String)((Vector)temp).get(3));
+                            if (((Vector)temp).get(2).equals("待收款")) unpaidnum+=Float.parseFloat((String)((Vector)temp).get(3));
                             if (((Vector)temp).get(2).equals("已完成")) paidnum+=Float.parseFloat((String)((Vector)temp).get(3));
                         }
                         table.setData(data, resourceBundle);
@@ -185,7 +185,7 @@ public class fun_3 extends JPanel{
                         Vector data = fun_4_payment(String.valueOf(comboBox.getSelectedItem()));
                         float unpaidnum = 0; float paidnum = 0;
                         for (Object temp :data){
-                            if (((Vector)temp).get(2).equals("未付款")) unpaidnum+=Float.parseFloat((String)((Vector)temp).get(3));
+                            if (((Vector)temp).get(2).equals("待收款")) unpaidnum+=Float.parseFloat((String)((Vector)temp).get(3));
                             if (((Vector)temp).get(2).equals("已完成")) paidnum+=Float.parseFloat((String)((Vector)temp).get(3));
                         }
                         table.setData(data, resourceBundle);
@@ -203,7 +203,7 @@ public class fun_3 extends JPanel{
                         Vector data = fun_4_payment(find_textfield.getText(), String.valueOf(comboBox.getSelectedItem()));
                         float unpaidnum = 0; float paidnum = 0;
                         for (Object temp :data){
-                            if (((Vector)temp).get(2).equals("未付款")) unpaidnum+=Float.parseFloat((String)((Vector)temp).get(3));
+                            if (((Vector)temp).get(2).equals("待收款")) unpaidnum+=Float.parseFloat((String)((Vector)temp).get(3));
                             if (((Vector)temp).get(2).equals("已完成")) paidnum+=Float.parseFloat((String)((Vector)temp).get(3));
                         }
                         table.setData(data, resourceBundle);
@@ -413,7 +413,7 @@ public class fun_3 extends JPanel{
         Vector vec = new Vector();
         try{
             while(res.next()){
-                if (res.getString("state").equals("已完成") || res.getString("state").equals("未付款")){
+                if (res.getString("state").equals("已完成") || res.getString("state").equals("待收款")){
                     Vector temp = new Vector();
                     temp.add(customer);
                     temp.add(res.getString("id"));
